@@ -1,0 +1,7 @@
+- hosts: router
+  become: true
+  tasks:
+  - name: Build given client certificate
+    include_role:
+      name: easy-rsa
+      tasks_from: build

@@ -1,0 +1,9 @@
+---
+
+- name: VPN setup
+  hosts: all
+  become: true
+  vars_files: vars/guarida.yaml
+  roles:
+    - vpn-server
+

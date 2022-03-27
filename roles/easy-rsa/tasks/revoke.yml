@@ -1,0 +1,35 @@
+---
+- name: easy-rsa  |  Revoke client
+  command: bash -c "./easyrsa revoke {{ vpn_revoke_client }} 2> /dev/null"
+  args:
+    chdir: "{{ easy_rsa_dir }}"
+  when: ansible_distribution == "Ubuntu" and ansible_distribution_release == 'bionic'
+  notify:
+  - Create CRL key
+
+#- name: easy-rsa  |  Create dummy certificate
+#  command: bash -c ". ./vars && sh ./build-key --batch dummy 2> /dev/null"
+#  args:
+#    chdir: "{{ easy_rsa_dir }}"
+#    creates: "{{ easy_rsa_dir }}/keys/dummy.crt"
+#  tags: [ 'easy-rsa', 'revoke' ]
+#
+#- name: easy-rsa  |  Create CRL key
+#  command: bash -c ". ./vars && sh ./revoke-full dummy 2> /dev/null"
+#  args:
+#    chdir: "{{ easy_rsa_dir }}"
+#    #creates: "{{ easy_rsa_dir }}/pki/gen.crl"
+#  tags: [ 'easy-rsa', 'revoke' ]
+#  ignore_errors: yes
+
+
+
+- name: easy-rsa  |  Revoke client
+  shell: "./easyrsa revoke {{ vpn_revoke_client }} 2> /dev/null"
+  args:
+    chdir: "{{ easy_rsa_dir }}"
+  when: (ansible_distribution == 'Ubuntu' and ansible_distribution_release == 'focal') or
+        (ansible_distribution == 'Ubuntu' and ansible_distribution_release == 'hirsute' or ansible_distribution_release == 'impish') or
+        (ansible_distribution == 'Debian')
+  notify:
+  - Create CRL key

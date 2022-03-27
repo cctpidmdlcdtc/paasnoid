@@ -1,0 +1,12 @@
+
+services: 
+  nginx:
+    image: nginx:alpine
+    ports:
+      - "{{ ip_dest }}:80:80"
+    volumes:
+      - ./conf.d:/etc/nginx/conf.d
+      #- ./htpasswd:/etc/nginx/htpasswd
+      - ./hosts:/etc/hosts
+    networks:
+      - proxy

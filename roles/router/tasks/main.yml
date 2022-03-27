@@ -1,0 +1,29 @@
+---
+
+- name: Configure bridge
+  include: bridge.yml
+
+- name: Flush handlers
+  meta: flush_handlers
+
+- name: Configure Access Point
+  include: hostapd.yml
+
+
+
+# already applied in openvpn
+#- name: firewall  |  Enabling ip forwarding
+#  lineinfile:
+#    path: /etc/sysctl.conf
+#    regexp: '^#net.ipv4.ip_forward=1'
+#    line: net.ipv4.ip_forward=1
+#
+
+- name: Configure DHCP server
+  include: dhcp.yml
+  when: dhcp_enabled
+
+
+- name: router  |  Apply iptables rules
+  include_role:
+    name: firewall

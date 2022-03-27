@@ -1,0 +1,36 @@
+---
+- name: pihole  |  Add DNS to Pi-hole
+  lineinfile:
+    path: /opt/pihole/etc-pihole/custom.list
+    state: present
+    regexp: '^{{ ip_VPN }} {{ item }}.{{ name_VPN|lower }}.vpn'
+    line: '{{ ip_VPN }} {{ item }}.{{ name_VPN|lower }}.vpn'
+  loop: "{{ run_roles }}"
+
+- name: test transmissionnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnn
+  set_fact:
+    services:
+      - name: transmission.{{ name_VPN | lower }}.vpn
+#        destination: '10.0.42.168'
+        destination: transmission.chovelle.{{ name_VPN | lower }}.vpn
+
+- name: proxy-http  |  Copy proxy config
+  include_role:
+    name: proxy-http
+  vars:
+    virtualhosts: "{{ services }}"
+
+
+- name: test embyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyy
+  set_fact:
+    services:
+      - name: emby.{{ name_VPN | lower }}.vpn
+#        destination: '10.0.42.168'
+        destination: emby.chovelle.{{ name_VPN | lower }}.vpn
+
+- name: proxy-http  |  Copy proxy config
+  include_role:
+    name: proxy-http
+  vars:
+    virtualhosts: "{{ services }}"
+

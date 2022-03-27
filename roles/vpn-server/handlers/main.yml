@@ -1,0 +1,7 @@
+---
+- name: "restart openvpn@{{ name_VPN }}"
+  systemd:
+    name: openvpn@{{ name_VPN }}
+    state: restarted
+    enabled: yes
+    daemon_reload: yes

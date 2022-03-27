@@ -1,0 +1,42 @@
+version: '3.4'
+
+networks:
+  {{ service_name }}:
+    external:
+      name: {{ service_name }}
+
+volumes:
+  database_volume:
+  gpg_volume:
+  images_volume:
+
+services:
+  db:
+    image: mariadb:10.3
+    env_file:
+      - env/mysql.env
+    volumes:
+      - database_volume:/var/lib/mysql
+    expose:
+      - 3306
+    networks:
+      - {{ service_name }}
+
+  passbolt:
+    image: passbolt/passbolt:latest-ce
+    #Alternatively you can use rootless:
+    #image: passbolt/passbolt:latest-ce-non-root
+    tty: true
+    depends_on:
+      - db
+    env_file:
+      - env/passbolt.env
+    volumes:
+      - gpg_volume:/etc/passbolt/gpg
+      - images_volume:/usr/share/php/passbolt/webroot/img/public
+    command: ["/usr/bin/wait-for.sh", "-t", "0", "db:3306", "--", "/docker-entrypoint.sh"]
+    expose:
+      - 80
+      - 443
+    networks:
+      - {{ service_name }}

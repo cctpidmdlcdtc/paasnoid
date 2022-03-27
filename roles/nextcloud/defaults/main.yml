@@ -1,0 +1,33 @@
+service_name: nextcloud
+service_subnet: '10.101.0.0/24'
+service_gateway: 10.101.0.1
+ip_host_listen: "{{ ip_VPN }}"
+br_output: "br-{{ service_name }}"
+
+net_in: []
+net_out: [
+  '# {{ service_name }}',
+  '-A OUTPUT -o {{ br_output }} -p tcp -m tcp --dport 80 -m conntrack --ctstate NEW -j ACCEPT'
+]
+net_forward: [
+  '# {{ service_name }}',
+  '# Allow nextcloud to query updates',
+  '-A FORWARD -i {{ br_output }} -o {{ dev_WAN }} -j ACCEPT',
+  '# Vagrant needs network traffic',
+  '-A FORWARD -i {{ br_output }} -o {{ br_output }} -j ACCEPT'
+]
+net_nat: []
+
+nextcloud_MYSQL_ROOT_PASSWORD:  "1234"
+nextcloud_MYSQL_PASSWORD:       "1234"
+nextcloud_MYSQL_DATABASE:       "nextcloud"
+nextcloud_MYSQL_USER:           "nextcloud"
+NEXTCLOUD_ADMIN_USER:           "admin"
+NEXTCLOUD_ADMIN_PASSWORD:       "1234"
+nextcloud_dns:                  "nube.{{ name_VPN|lower }}.vpn"
+
+services:
+  - name: "nube.{{ name_VPN|lower }}.vpn"
+    destination: "{{ service_name }}:80"
+#  - name: "collabora.{{ name_VPN|lower }}.vpn"
+#    destination: office:9980

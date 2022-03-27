@@ -1,0 +1,6 @@
+---
+- name: Configure service
+  include_tasks: configure.yml
+
+- name: Deploy service
+  include_tasks: deploy.yml

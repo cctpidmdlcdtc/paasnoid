@@ -1,0 +1,35 @@
+- name: router  |  Installing bridge utils
+  apt:
+    pkg: bridge-utils
+    state: present
+
+- block:
+
+  - name: router  |  Network configuration
+    template:
+      src: 01-network-manager-all.yaml.j2
+      dest: /etc/netplan/01-network-manager-all.yaml
+    notify:
+    - router  |  Bring bridge interface up Ubuntu
+  
+  - name: router  |  Apply netplan
+    command: sudo netplan apply
+    changed_when: False
+  
+  when: (ansible_distribution == 'Ubuntu' and net_config)
+
+- name: router  |  Network configuration
+  template:
+    src: interfaces.j2
+    dest: /etc/network/interfaces
+  when: (ansible_distribution == 'Debian' and net_config)
+  notify:
+  - router  |  Bring bridge interface up Debian
+
+- name: router  |  LAN configuration
+  template:
+    src: 60-lan.j2
+    dest: /etc/network/interfaces.d/60-lan
+  when: (ansible_distribution == 'Debian' and net_config == false)
+  notify:
+  - router  |  Bring bridge interface up Debian

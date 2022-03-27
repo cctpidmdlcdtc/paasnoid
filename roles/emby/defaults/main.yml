@@ -1,0 +1,30 @@
+service_name: emby
+service_subnet: '10.101.2.0/24'
+service_gateway: 10.101.2.1
+ip_host_listen: "{{ ip_VPN }}"
+br_output: "br-{{ service_name }}"
+
+net_in: []
+net_out: [
+  '# {{ service_name }}',
+  '-A OUTPUT -o {{ br_output }} -p tcp -m tcp --dport 80 -m conntrack --ctstate NEW -j ACCEPT'
+]
+net_forward: [
+  '# {{ service_name }}',
+  '# Emby querying internet',
+  '-A FORWARD -i {{ br_output }} -o {{ dev_WAN }} -p udp -m udp --dport 53 -m conntrack --ctstate NEW -j ACCEPT',
+  '-A FORWARD -i {{ br_output }} -o {{ dev_WAN }} -p tcp -m multiport --dports 80,443,8080 -m conntrack --ctstate NEW -j ACCEPT',
+  '# Vagrant needs network traffic',
+  '-A FORWARD -i {{ br_output }} -o {{ br_output }} -j ACCEPT'
+]
+net_nat: []
+
+# router
+services:
+  - name: "{{ service_name }}.{{ name_VPN|lower }}.vpn"
+    destination: "{{ service_name }}:8096"
+
+# nas
+#services:
+#  - name: "{{ service_name }}.{{ ansible_hostname }}.lan"
+#    destination: "{{ service_name }}:8096"

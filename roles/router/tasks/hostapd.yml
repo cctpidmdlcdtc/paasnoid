@@ -1,0 +1,33 @@
+
+- block:
+  
+  - name: router  |  Install hostapd
+    apt:
+      pkg: hostapd
+      state: present
+
+  - name: router  |  Copy hostapd config
+    template:
+      src: hostapd.conf.j2
+      dest: /etc/hostapd/hostapd.conf
+    notify:
+    - router  |  Restart hostapd
+
+  - name: router  |  Enable hostapd config
+    lineinfile:
+      path: /etc/default/hostapd
+      regexp: '^DAEMON_CONF'
+      insertafter: '^#DAEMON_CONF'
+      line: 'DAEMON_CONF="/etc/hostapd/hostapd.conf"'
+    notify:
+    - router  |  Restart hostapd
+
+  - name: router  |  Wait for bridge to fully start before start hostapd
+    template:
+      src: hostapd.service.j2
+      dest: /etc/systemd/system/hostapd.service
+    when: (ansible_distribution == 'Ubuntu')
+    notify:
+    - router  |  Restart hostapd
+    
+  when: ap_enabled

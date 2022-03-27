@@ -1,0 +1,19 @@
+---
+- name: easy-rsa  |  Create client private key
+  shell: "./easyrsa gen-req {{ item }} nopass 2> /dev/null"
+  environment:
+    EASYRSA_REQ_CN: '{{ item }}'
+  args:
+    chdir: "{{ easy_rsa_dir }}"
+    creates: "{{ easy_rsa_dir }}/pki/private/{{ item }}.key"
+  with_items: "{{ vpn_clients }}"
+
+- name: easy-rsa  |  Create client certificate
+  shell: "./easyrsa sign-req client {{ item }} 2> /dev/null"
+  args:
+    chdir: "{{ easy_rsa_dir }}"
+    creates: "{{ easy_rsa_dir }}/pki/issued/{{ item }}.crt"
+  with_items: "{{ vpn_clients }}"
+  notify:
+  - Create CRL key
+

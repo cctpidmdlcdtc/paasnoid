@@ -1,0 +1,8 @@
+auto {{ dev_BRIDGE }}
+iface {{ dev_BRIDGE }} inet static
+	bridge_ports {{ dev_LAN }}
+	address {{ ip_BRIDGE }}
+	netmask {{ mask_BRIDGE }}
+	network {{ net_BRIDGE }}
+#	post-up ifup {{ dev_WLAN }}
+#	pre-down ifdown {{ dev_WLAN }}

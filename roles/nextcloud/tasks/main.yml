@@ -1,0 +1,192 @@
+---
+- name: "{{ service_name }}  |  Create destiny"
+  file:
+    path: "/opt/{{ service_name }}"
+    state: directory
+    mode: '0750'
+
+- name: "{{ service_name }}  |  Copy database config"
+  template: 
+    src: db.env.j2
+    dest: "/opt/{{ service_name }}/db.env"
+    owner: root
+    group: root
+    mode: 0600 
+  register: newdocker
+
+- name: "{{ service_name }}  |  Copy external storage config"
+  template: 
+    src: external_storage.json.j2
+    dest: "/opt/{{ service_name }}/external_storage.json"
+    owner: root
+    group: root
+    mode: 0444
+
+- name: "{{ service_name }}  |  Copy docker-compose"
+  template: 
+    src: docker-compose.yml
+    dest: "/opt/{{ service_name }}/"
+    owner: root
+    group: root
+    mode: 0600 
+  register: newdocker
+
+- set_fact:
+    nextcloud_init: true
+  when: newdocker.changed
+
+
+
+- name: "{{ service_name }}  |  Create a network with pretty name"
+  docker_network:
+    name: "{{ service_name }}"
+    driver_options:
+      com.docker.network.bridge.name: br-{{ service_name }}
+    ipam_options:
+      subnet: "{{ service_subnet }}"
+      gateway: "{{ service_gateway }}"
+
+
+
+- name: "{{ service_name }}  |  Get container info"
+  docker_container_info:
+    name: "{{ service_name }}_{{ service_name }}_1"
+  register: result
+  
+- name: "{{ service_name }}  |  Tear down existing services"
+  docker_compose:
+    project_src: "/opt/{{ service_name }}"
+    #remove_images: yes
+    remove_volumes: yes
+    state: absent
+  when: not result.exists
+
+
+
+- name: "{{ service_name }}  |  Create and start services"
+  docker_compose:
+    project_src: "/opt/{{ service_name }}"
+  when: nextcloud_init is defined
+
+
+
+- name: "{{ service_name }}  |  Copy proxy config"
+  include_role:
+    name: proxy-http
+  vars:
+    network_name: "{{ service_name }}"
+    virtualhosts: "{{ services }}"
+#    ip_host_listen: '{{ ansible_host }}'
+
+
+
+- name: "{{ service_name }}  |  Get container info"
+  docker_container_info:
+    name: "{{ service_name }}_{{ service_name }}_1"
+  register: result
+
+#- name: "{{ service_name }}  |  Apply iptables rules"
+#  include_role:
+#    name: firewall
+#  vars:
+#    container_ip: "{{ item.IPAddress }}"
+#  with_items: "{{ result | json_query('container.NetworkSettings.Networks.[*]') }}"
+#  when: "'router' in group_names"
+
+- block:
+
+  - name: "{{ service_name }}  |  Get Container ip address 1/2"
+    set_fact:
+      ips_contenedores: "{{ result | json_query('container.NetworkSettings.Networks.[*]') }}"
+
+  - name: "{{ service_name }}  |  Get Container ip address 2/2"
+    set_fact:
+      container_ip: "{{ ips_contenedores[0][0].IPAddress }}"
+
+  when: "'router' in group_names"
+
+
+
+- name: "{{ service_name }}  |  Get Container ip address 2/2"
+  set_fact:
+    container_ip: "{{ ansible_host }}"
+  when: "'nas' in group_names"
+
+
+
+- name: "{{ service_name }}  |  Apply iptables rules"
+  include_role:
+    name: firewall
+#  vars:
+#    container_ip: "{{ item.IPAddress }}"
+#  with_items: "{{ ips_contenedores }}"
+  when: "'router' in group_names"
+
+
+
+- name: "{{ service_name }}  |  Save iptables rules to apply later"
+  set_fact:
+    fw_net_in: "{{ net_in }}"
+    fw_net_out: "{{ net_out }}"
+    fw_net_forward: "{{ net_forward }}"
+    fw_net_nat: "{{ net_nat }}"
+  when: "'nas' in group_names"  
+
+
+
+# es que esta tarea se tiene que ejecutar en el router solamente
+- name: "{{ service_name }}  |  Add DNS to Pi-hole"
+  lineinfile:
+    path: /opt/pihole/etc-pihole/custom.list
+    state: present
+    regexp: '^{{ ip_VPN }} {{ item[0].name }}'
+    line: '{{ ip_VPN }} {{ item[0].name }}'
+  loop:
+    - "{{ services }}"
+  when: "'router' in group_names"
+
+
+
+# only on first run!!!
+
+#  # Nextcloud initialization
+#  - name: "{{ service_name }}   |  Complete installation with configured parameters"
+#    community.docker.docker_container_exec:
+#      container: "{{ service_name }}_{{ service_name }}_1"
+#      command: >
+#        php occ maintenance:install
+#        --database "mysql" --database-host "db" --database-name "{{ nextcloud_MYSQL_DATABASE }}" \
+#        --database-user "{{ nextcloud_MYSQL_USER }}" --database-pass "{{ nextcloud_MYSQL_PASSWORD }}" \
+#        --admin-user "{{ NEXTCLOUD_ADMIN_USER }}" --admin-pass "{{ NEXTCLOUD_ADMIN_PASSWORD }}"
+#      user: www-data
+#
+#  # Waiting to see this on the logs
+#  # nextcloud_1  | Nextcloud was successfully installed
+#  - name: "{{ service_name }}  |  When config.php has the right contents, it's safe to continue"
+#    pause:
+#      seconds: 30
+
+
+
+- block:
+
+  - name: "{{ service_name }}  |  Add DNS or Nextcloud won't let you log in"
+    lineinfile:
+      path: /var/lib/docker/volumes/nextcloud_config/_data/config.php
+      regexp: "^    1 => '{{ services[0].name }}',"
+      insertafter: "^    0 => 'localhost'"
+      line: "    1 => '{{ services[0].name }}',"
+
+  - name: "{{ service_name }}   |  Install external storage app"
+    community.docker.docker_container_exec:
+      container: "{{ service_name }}_{{ service_name }}_1"
+      command: php occ app:enable files_external
+      user: www-data
+    
+  - name: "{{ service_name }}   |  Enable external storage"
+    community.docker.docker_container_exec:
+      container: "{{ service_name }}_{{ service_name }}_1"
+      command: php occ files_external:import /tmp/external_storage.json
+      user: www-data
+
+  when: nextcloud_init is defined

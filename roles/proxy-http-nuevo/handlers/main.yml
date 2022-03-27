@@ -1,0 +1,10 @@
+---
+- name: Tear down existing services
+  docker_compose:
+    project_src: /opt/proxyhttp
+    #remove_images: yes
+    remove_volumes: yes
+    state: absent
+
+- name: Restart iptables
+  service: name=netfilter-persistent state=restarted

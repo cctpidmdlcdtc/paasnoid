@@ -1,0 +1,116 @@
+---
+- name: Common tasks
+  hosts: all
+  become: true
+  roles:
+    - basic
+    - docker
+  tags: common
+
+- name: VPN setup
+  hosts: router
+  become: true
+  roles:
+    - easy-rsa
+    - vpn-server
+#    - pihole
+  tags: vpn
+
+- name: Pi-hole setup
+  hosts: router
+  become: true
+  roles:
+    - pihole
+  tags: pihole
+
+- name: router setup
+  hosts: router
+  become: true
+  roles:
+    - router
+#    - keepalived # en inductor no funciona
+  tags: router
+
+- name: Services running on the VPN
+  hosts: router
+  become: true
+  vars:
+    - ip_host_listen: '{{ ip_VPN }}'
+  roles:
+    - monitoring
+    - node_exporter
+  tags: monitoring
+
+- name: Services floating
+  hosts: router
+  become: true
+  roles:
+#    - passbolt # ojo, db se pisa con otros nombres de host, no, no? a proxy-http le da igual? y no tiene https!!!
+#    - transmission
+    - emby
+    - nextcloud
+#    - jellyfin
+  tags: external
+
+#- name: Services floating
+#  hosts: nas
+#  become: true
+#  vars:
+#    - ip_host_listen: '{{ ansible_host }}'
+#    - br_output: "br0"
+#  roles:
+#    - transmission
+##    - emby
+#  tags:
+#    - internal
+#
+#
+#- name: Apply late firewall rules for floating services on router
+#  hosts: router
+#  become: true
+#  tasks:
+#    - name: "{{ service_name }}  |  Apply iptables rules"
+#      include_role:
+#        name: firewall
+#      vars:
+#        service_name: '{{ item }}'
+## si has lanzado varios roles antes, estas variables tendrán valores raros
+## meter todo esto en un diccionario que cuelgue de cada servicio
+##
+## llevar tambien el dns a pihole, que lo estas poniendo a mano cuando flota en nas
+#        net_in: "{{ hostvars['viejamina'].fw_net_in }}"
+#        net_out: "{{ hostvars['viejamina'].fw_net_out }}"
+#        net_forward: "{{ hostvars['viejamina'].fw_net_forward }}"
+#        net_nat: "{{ hostvars['viejamina'].fw_net_nat }}"
+#      with_items:
+#        - transmission
+##        - emby
+## esto aqui no funciona, porque no has necesito pasar estas variables y esperar a aplicar aqui las reglas
+##        net_in: "{{ hostvars['corcho'].fw_net_in }}"
+##        net_out: "{{ hostvars['corcho'].fw_net_out }}"
+##        net_forward: "{{ hostvars['corcho'].fw_net_forward }}"
+##        net_nat: "{{ hostvars['corcho'].fw_net_nat }}"
+##      with_items:
+##        - monitoring
+#  tags:
+#    - internal
+
+
+
+# todo esto ya no, no?
+
+#- name: Services running on the VPN, inside the NAS
+#  hosts: nas
+#  become: true
+#  vars_files: vars/guarida.yaml
+#  roles:
+#    - nas-roles
+#  tags: nas
+
+#- name: Expose nas services on router
+#  hosts: router
+#  become: true
+#  vars_files: vars/guarida.yaml
+#  roles:
+#    - nat-http
+#  tags: nat

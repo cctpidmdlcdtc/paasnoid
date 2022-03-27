@@ -1,0 +1,9 @@
+---
+#- name: Install prometheus node exporter
+#  include_role:
+#    name: node_exporter
+
+- name: Install desired services
+  include_role:
+    name: "{{ item }}"
+  with_items: "{{ run_roles }}"

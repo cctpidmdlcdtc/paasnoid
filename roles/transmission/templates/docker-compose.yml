@@ -1,0 +1,27 @@
+version: '3'
+
+networks:
+  {{ service_name }}:
+    external:
+      name: {{ service_name }}
+
+volumes:
+  config:
+
+services:
+  {{ service_name }}:
+    image: dperson/transmission
+    expose:
+      - 9091
+      - 51413
+      - 51413/udp
+    restart: always
+    volumes:
+      - config:/var/lib/transmission-daemon
+      - /docker-share/completo:/var/lib/transmission-daemon/downloads
+      - /docker-share/temporal:/var/lib/transmission-daemon/incomplete
+    environment:
+      - USERID=33
+      - GROUPID=33
+    networks:
+      - {{ service_name }}

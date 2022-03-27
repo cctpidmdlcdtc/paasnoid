@@ -1,0 +1,34 @@
+---
+- name: easy-rsa  |  Installing easy-rsa software
+  apt: pkg=easy-rsa state=present
+
+
+
+- include: bionic-setup.yml
+  when: ansible_distribution == "Ubuntu" and ansible_distribution_release == 'bionic'
+
+- include: focal-setup.yml
+  when: (ansible_distribution == 'Ubuntu' and ansible_distribution_release == 'focal') or
+        (ansible_distribution == 'Ubuntu' and ansible_distribution_release == 'hirsute' or ansible_distribution_release == 'impish') or
+        (ansible_distribution == 'Debian')
+
+
+
+- name: Flush handlers
+  meta: flush_handlers
+
+
+
+- include: bionic-clients.yml
+  when: ansible_distribution == "Ubuntu" and ansible_distribution_release == 'bionic'
+
+- include: focal-clients.yml
+  when: (ansible_distribution == 'Ubuntu' and ansible_distribution_release == 'focal') or
+        (ansible_distribution == 'Ubuntu' and ansible_distribution_release == 'hirsute' or ansible_distribution_release == 'impish') or
+        (ansible_distribution == 'Debian')
+
+
+# no ejecutarlo siempre, solo bajo demanda
+# la primera vez acordarse de ejecutarlo
+#- include: build.yml
+#  tags: build_ovpn

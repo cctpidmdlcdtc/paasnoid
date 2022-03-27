@@ -1,0 +1,24 @@
+- name: router  |  Installing dhcp daemon
+  apt:
+    pkg: isc-dhcp-server
+    state: present
+
+- name: router  |  Copy dhcp config
+  template:
+    src: dhcpd.conf.j2
+    dest: /etc/dhcp/dhcpd.conf
+
+- name: router  |  Configure listen interface for dhcp server
+  lineinfile:
+    path: /etc/default/isc-dhcp-server
+    regexp: '^INTERFACESv4=""'
+    line: INTERFACESv4="{{ dev_BRIDGE }}"
+  notify:
+  - router  |  Restart dhcp
+
+- name: router  |  Ensure dhcp is running
+  systemd:
+    name: isc-dhcp-server
+    state: started
+    enabled: yes
+    daemon_reload: yes

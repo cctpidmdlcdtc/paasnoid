@@ -1,0 +1,21 @@
+service_name: passbolt
+service_subnet: '10.101.5.0/24'
+service_gateway: 10.101.5.1
+ip_host_listen: "{{ ip_VPN }}"
+br_output: "br-{{ service_name }}"
+
+net_in: []
+net_out: [
+  '# {{ service_name }}',
+  '-A OUTPUT -o {{ br_output }} -p tcp -m tcp --dport 443 -m conntrack --ctstate NEW -j ACCEPT'
+]
+net_forward: [
+  '# {{ service_name }}',
+  '# Vagrant needs network traffic',
+  '-A FORWARD -i {{ br_output }} -o {{ br_output }} -j ACCEPT'
+]
+net_nat: []
+
+services:
+  - name: "{{ service_name }}.{{ name_VPN|lower }}.vpn"
+    destination: "{{ service_name }}:80"

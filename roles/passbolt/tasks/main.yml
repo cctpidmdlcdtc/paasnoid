@@ -1,0 +1,122 @@
+---
+- name: "{{ service_name }}  |  Create destiny"
+  file:
+    path: "{{ item }}"
+    state: directory
+    mode: '0750'
+  with_items:
+    - "/opt/{{ service_name }}"
+    - "/opt/{{ service_name }}/env"
+
+- name: "{{ service_name }}  |  Copy docker-compose"
+  template: 
+    src: docker-compose.yml
+    dest: "/opt/{{ service_name }}/"
+    owner: root
+    group: root
+    mode: 0600 
+  register: newdocker
+
+- name: "{{ service_name }}  |  Copy mysql and passbolt variables"
+  template: 
+    src: "{{ item }}.j2"
+    dest: /opt/{{ service_name }}/env/{{ item }}
+    owner: root
+    group: root
+    mode: 0600 
+  with_items:
+  - mysql.env
+  - passbolt.env
+  register: newdocker
+
+- name: "{{ service_name }}  |  Create a network with pretty name"
+  docker_network:
+    name: "{{ service_name }}"
+    driver_options:
+      com.docker.network.bridge.name: br-{{ service_name }}
+    ipam_options:
+      subnet: "{{ service_subnet }}"
+      gateway: "{{ service_gateway }}"
+
+- name: "{{ service_name }}  |  Get container info"
+  docker_container_info:
+    name: "{{ service_name }}_{{ service_name }}_1"
+  register: result
+  
+- name: "{{ service_name }}  |  Tear down existing services"
+  docker_compose:
+    project_src: "/opt/{{ service_name }}"
+    #remove_images: yes
+    remove_volumes: yes
+    state: absent
+  when: not result.exists
+
+- name: "{{ service_name }}  |  Create and start services"
+  docker_compose:
+    project_src: "/opt/{{ service_name }}"
+  when: newdocker.changed
+
+- name: "{{ service_name }}  |  Copy proxy config"
+  include_role:
+    name: proxy-http
+  vars:
+    network_name: "{{ service_name }}"
+    virtualhosts: "{{ services }}"
+#    ip_host_listen: '{{ ansible_host }}'
+
+- name: "{{ service_name }}  |  Get container info"
+  docker_container_info:
+    name: "{{ service_name }}_{{ service_name }}_1"
+  register: result
+
+#- name: "{{ service_name }}  |  Apply iptables rules"
+#  include_role:
+#    name: firewall
+#  vars:
+#    container_ip: "{{ item.IPAddress }}"
+#  with_items: "{{ result | json_query('container.NetworkSettings.Networks.[*]') }}"
+#  when: "'router' in group_names"
+
+- block:
+
+  - name: "{{ service_name }}  |  Get Container ip address 1/2"
+    set_fact:
+      ips_contenedores: "{{ result | json_query('container.NetworkSettings.Networks.[*]') }}"
+
+  - name: "{{ service_name }}  |  Get Container ip address 2/2"
+    set_fact:
+      container_ip: "{{ ips_contenedores[0][0].IPAddress }}"
+
+  when: "'router' in group_names"
+
+- name: "{{ service_name }}  |  Get Container ip address 2/2"
+  set_fact:
+    container_ip: "{{ ansible_host }}"
+  when: "'nas' in group_names"
+
+- name: "{{ service_name }}  |  Apply iptables rules"
+  include_role:
+    name: firewall
+#  vars:
+#    container_ip: "{{ item.IPAddress }}"
+#  with_items: "{{ ips_contenedores }}"
+  when: "'router' in group_names"
+
+- name: "{{ service_name }}  |  Save iptables rules to apply later"
+  set_fact:
+    fw_net_in: "{{ net_in }}"
+    fw_net_out: "{{ net_out }}"
+    fw_net_forward: "{{ net_forward }}"
+    fw_net_nat: "{{ net_nat }}"
+  when: "'nas' in group_names"  
+
+# es que esta tarea se tiene que ejecutar en el router solamente
+- name: "{{ service_name }}  |  Add DNS to Pi-hole"
+  lineinfile:
+    path: /opt/pihole/etc-pihole/custom.list
+    state: present
+    regexp: '^{{ ip_VPN }} {{ item[0].name }}'
+    line: '{{ ip_VPN }} {{ item[0].name }}'
+  loop:
+    - "{{ services }}"
+  when: "'router' in group_names"

@@ -1,0 +1,9 @@
+---
+- name: easy-rsa  |  Create client certificate
+  command: bash -c ". ./vars && sh ./build-key --batch {{ item }} 2> /dev/null"
+  args:
+    chdir: "{{ easy_rsa_dir }}"
+    creates: "{{ easy_rsa_dir }}/keys/{{ item }}.crt"
+  with_items: "{{ vpn_clients }}"
+  notify:
+  - Create CRL key

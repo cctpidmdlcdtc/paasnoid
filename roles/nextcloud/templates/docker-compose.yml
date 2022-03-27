@@ -1,0 +1,106 @@
+version: '3'
+
+networks:
+  {{ service_name }}:
+    external:
+      name: {{ service_name }}
+
+volumes:
+  nextcloud:
+  apps:
+  config:
+  data:
+  db:
+#  oo_certs:
+#  oo_logs:
+#  oo_cache:
+#  postgresql_data:
+
+services:
+  {{ service_name }}:
+    image: nextcloud
+    expose:
+      - 80
+    restart: always
+    volumes:
+      - nextcloud:/var/www/html
+      - apps:/var/www/html/custom_apps
+      - config:/var/www/html/config
+      - data:/var/www/html/data
+      - /docker-share:/docker-share
+      - ./external_storage.json:/tmp/external_storage.json
+    environment:
+      - MYSQL_HOST=db
+    env_file:
+      - db.env
+    depends_on:
+      - db
+    networks:
+      - {{ service_name }}
+
+  db:
+    image: mariadb
+    command: --transaction-isolation=READ-COMMITTED --binlog-format=ROW --skip-innodb-read-only-compressed
+    restart: always
+    volumes:
+      - db:/var/lib/mysql
+    environment:
+      - "MYSQL_ROOT_PASSWORD={{ nextcloud_MYSQL_ROOT_PASSWORD }}"
+    env_file:
+      - db.env
+    networks:
+      - {{ service_name }}
+
+#  onlyoffice-documentserver:
+#    image: onlyoffice/documentserver
+#    depends_on:
+#      - onlyoffice-postgresql
+#      - onlyoffice-rabbitmq
+#    environment:
+#      - DB_TYPE=postgres
+#      - DB_HOST=onlyoffice-postgresql
+#      - DB_PORT=5432
+#      - DB_NAME=onlyoffice
+#      - DB_USER=onlyoffice
+#      - AMQP_URI=amqp://guest:guest@onlyoffice-rabbitmq
+#      # Uncomment strings below to enable the JSON Web Token validation.
+#      #- JWT_ENABLED=true
+#      #- JWT_SECRET=secret
+#      #- JWT_HEADER=Authorization
+#      #- JWT_IN_BODY=true
+#    expose:
+#      - 80
+#      - 443
+#    stdin_open: true
+#    restart: always
+#    stop_grace_period: 60s
+#    volumes:
+#       - oo_certs:/var/www/onlyoffice/Data
+#       - oo_logs:/var/log/onlyoffice
+#       - oo_cache:/var/lib/onlyoffice/documentserver/App_Data/cache/files
+#       - /var/www/onlyoffice/documentserver-example/public/files
+#       - /usr/share/fonts
+#    networks:
+#      - {{ service_name }}
+#       
+#  onlyoffice-rabbitmq:
+#    image: rabbitmq
+#    restart: always
+#    expose:
+#      - '5672'
+#    networks:
+#      - {{ service_name }}
+#
+#  onlyoffice-postgresql:
+#    image: postgres:9.5
+#    environment:
+#      - POSTGRES_DB=onlyoffice
+#      - POSTGRES_USER=onlyoffice
+#      - POSTGRES_HOST_AUTH_METHOD=trust
+#    restart: always
+#    expose:
+#      - '5432'
+#    volumes:
+#      - postgresql_data:/var/lib/postgresql
+#    networks:
+#      - {{ service_name }}
