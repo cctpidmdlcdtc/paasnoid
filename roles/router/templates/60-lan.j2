@@ -1,3 +1,4 @@
+{% if dev_LAN %}
 auto {{ dev_BRIDGE }}
 iface {{ dev_BRIDGE }} inet static
 	bridge_ports {{ dev_LAN }}
@@ -6,3 +7,4 @@ iface {{ dev_BRIDGE }} inet static
 	network {{ net_BRIDGE }}
 #	post-up ifup {{ dev_WLAN }}
 #	pre-down ifdown {{ dev_WLAN }}
+{% endif %}

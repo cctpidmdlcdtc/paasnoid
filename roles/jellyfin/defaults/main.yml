@@ -12,8 +12,8 @@ net_out: [
 net_forward: [
   '# {{ service_name }}',
   '# Jellyfin querying internet',
-  '-A FORWARD -i {{ br_output }} -o {{ dev_WAN }} -p udp -m udp --dport 53 -m conntrack --ctstate NEW -j ACCEPT',
-  '-A FORWARD -i {{ br_output }} -o {{ dev_WAN }} -p tcp -m multiport --dports 80,443,8080 -m conntrack --ctstate NEW -j ACCEPT',
+  '-A FORWARD -i {{ br_output }} -o {{ dev_BRIDGE_WAN }} -p udp -m udp --dport 53 -m conntrack --ctstate NEW -j ACCEPT',
+  '-A FORWARD -i {{ br_output }} -o {{ dev_BRIDGE_WAN }} -p tcp -m multiport --dports 80,443,8080 -m conntrack --ctstate NEW -j ACCEPT',
   '# Vagrant needs network traffic',
   '-A FORWARD -i {{ br_output }} -o {{ br_output }} -j ACCEPT'
 ]

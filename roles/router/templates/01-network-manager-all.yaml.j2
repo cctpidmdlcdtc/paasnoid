@@ -3,16 +3,14 @@ network:
   version: 2
   renderer: NetworkManager
   ethernets:
-#    {{ dev_WAN }}:
-#      dhcp4: no
-#      dhcp6: no
-#      addresses: [{{ ip_WAN }}/24, ]
-#      gateway4:  {{ gw_WAN }}
-#      nameservers:
-#              addresses: [{{ dns1 }}, {{ dns2 }}]
+    {{ dev_WAN }}:
+      dhcp4: no
+      dhcp6: no
+{% if dev_LAN %}
     {{ dev_LAN }}:
       dhcp4: no
       dhcp6: no
+{% endif %}
 {% if ap_enabled %}
 #  wifis:
     {{ dev_WLAN }}:
@@ -20,12 +18,24 @@ network:
       dhcp6: no
 {% endif %}
   bridges:
+    {{ dev_BRIDGE_WAN }}:
+      interfaces: [{{ dev_WAN }}]
+      dhcp4: no
+      dhcp6: no
+      addresses: [{{ ip_WAN }}/24]
+      routes:
+      - to: default
+        via: {{ gw_WAN }}
+      nameservers:
+        addresses: [{{ dns1 }}, {{ dns2 }}]
+{% if dev_LAN %}
     {{ dev_BRIDGE }}:
       dhcp4: no
       dhcp6: no
       addresses: [{{ ip_BRIDGE }}/24, ]
       interfaces:
         - {{ dev_LAN }}
-{% if ap_enabled %}
+  {% if ap_enabled %}
         - {{ dev_WLAN }}
+  {% endif %}
 {% endif %}

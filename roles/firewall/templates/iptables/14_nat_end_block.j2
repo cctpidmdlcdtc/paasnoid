@@ -1,5 +1,5 @@
 
 # NAT
--A POSTROUTING -o {{ dev_WAN }} -j MASQUERADE
+-A POSTROUTING -o {{ dev_BRIDGE_WAN }} -j MASQUERADE
 COMMIT
 # commit needs an empty line or a comment after it

@@ -21,8 +21,8 @@ net_out: [
 ]
 net_forward: [
   '# {{ service_name }}',
-  '-A FORWARD -i {{ br_output }} -o {{ dev_WAN }} -j ACCEPT',
-  '-A FORWARD -i {{ dev_WAN }} -o {{ br_output }} -j ACCEPT'
+  '-A FORWARD -i {{ br_output }} -o {{ dev_BRIDGE_WAN }} -j ACCEPT',
+  '-A FORWARD -i {{ dev_BRIDGE_WAN }} -o {{ br_output }} -j ACCEPT'
 ]
 net_nat: []
 

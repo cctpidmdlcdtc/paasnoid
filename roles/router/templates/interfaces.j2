@@ -7,12 +7,23 @@
 auto lo
 iface lo inet loopback
 
-auto {{ dev_WAN }}
-iface {{ dev_WAN }} inet static
+allow-hotplug {{ dev_WAN }}
+iface {{ dev_WAN }} inet manual
+	ethernet-wol g
+
+# Configure bridge and give it a static ip
+auto {{ dev_BRIDGE_WAN }}
+iface {{ dev_BRIDGE_WAN }} inet static
 	address {{ ip_WAN }}
 	netmask {{ mask_WAN }}
 	network {{ net_WAN }}
+    #broadcast 10.0.33.255
 	gateway	{{ gw_WAN }}
+	bridge_ports {{ dev_WAN }}
+	bridge_stp off
+	bridge_fd 0
+	bridge_maxwait 0
+	dns-nameservers {{ dns1 }}
 
 {% if ap_enabled %}
 allow-hotplug {{ dev_WLAN }}
@@ -21,7 +32,8 @@ iface {{ dev_WLAN }} inet manual
 ###	post-up service isc-dhcp-server restart
 ##	pre-down kill -9 `cat /run/hostapd.pid`
 {% endif %}
-	
+
+{% if dev_LAN %}
 auto {{ dev_BRIDGE }}
 iface {{ dev_BRIDGE }} inet static
 	bridge_ports {{ dev_LAN }}
@@ -30,3 +42,4 @@ iface {{ dev_BRIDGE }} inet static
 	network {{ net_BRIDGE }}
 #	post-up ifup {{ dev_WLAN }}
 #	pre-down ifdown {{ dev_WLAN }}
+{% endif %}

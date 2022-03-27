@@ -12,7 +12,7 @@ net_out: [
 net_forward: [
   '# {{ service_name }}',
   '# Allow nextcloud to query updates',
-  '-A FORWARD -i {{ br_output }} -o {{ dev_WAN }} -j ACCEPT',
+  '-A FORWARD -i {{ br_output }} -o {{ dev_BRIDGE_WAN }} -j ACCEPT',
   '# Vagrant needs network traffic',
   '-A FORWARD -i {{ br_output }} -o {{ br_output }} -j ACCEPT'
 ]
