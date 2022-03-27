@@ -9,7 +9,7 @@
 
 - include: focal-setup.yml
   when: (ansible_distribution == 'Ubuntu' and ansible_distribution_release == 'focal') or
-        (ansible_distribution == 'Ubuntu' and ansible_distribution_release == 'hirsute' or ansible_distribution_release == 'impish') or
+        (ansible_distribution == 'Ubuntu' and ansible_distribution_release == 'hirsute' or ansible_distribution_release == 'impish' or ansible_distribution_release == 'jammy') or
         (ansible_distribution == 'Debian')
 
 
@@ -24,7 +24,7 @@
 
 - include: focal-clients.yml
   when: (ansible_distribution == 'Ubuntu' and ansible_distribution_release == 'focal') or
-        (ansible_distribution == 'Ubuntu' and ansible_distribution_release == 'hirsute' or ansible_distribution_release == 'impish') or
+        (ansible_distribution == 'Ubuntu' and ansible_distribution_release == 'hirsute' or ansible_distribution_release == 'impish' or ansible_distribution_release == 'jammy') or
         (ansible_distribution == 'Debian')
 
 

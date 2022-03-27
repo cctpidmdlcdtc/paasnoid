@@ -29,7 +29,7 @@
   args:
     chdir: "{{ easy_rsa_dir }}"
   when: (ansible_distribution == 'Ubuntu' and ansible_distribution_release == 'focal') or
-        (ansible_distribution == 'Ubuntu' and ansible_distribution_release == 'hirsute' or ansible_distribution_release == 'impish') or
+        (ansible_distribution == 'Ubuntu' and ansible_distribution_release == 'hirsute' or ansible_distribution_release == 'impish' or ansible_distribution_release == 'jammy') or
         (ansible_distribution == 'Debian')
   notify:
   - Create CRL key
