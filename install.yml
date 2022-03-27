@@ -113,3 +113,10 @@
 #  roles:
 #    - nat-http
 #  tags: nat
+
+- name: KVM
+  hosts: all
+  become: true
+  roles:
+    - kvm
+  tags: kvm

@@ -1,0 +1,172 @@
+---
+
+- name: KVM  |  Check for virtualization extensions
+  shell: "egrep -q '^flags.*(svm|vmx)' /proc/cpuinfo && echo virtualization extensions available"
+  register: kvm_output
+  changed_when: false
+
+- name: KVM  |  Assert that virtualization extensions are available
+  assert:
+    that: kvm_output.stdout_lines[0] == 'virtualization extensions available'
+    quiet: true
+
+- name: KVM  |  Identify CPU vendor
+  set_fact:
+    cpu_vendor: "{{ ansible_processor[1] }}"
+
+- block:
+
+  - name: KVM  |  Check if IOMMU is configured in the GRUB config
+    lineinfile:
+      backup: true
+      path: /etc/default/grub
+      regexp: '^GRUB_CMDLINE_LINUX_DEFAULT=".*amd_iommu=on iommu=pt kvm.ignore_msrs=1'
+      state: absent
+    check_mode: true
+    register: grub_cmdline_check
+    changed_when: false
+
+  - name: KVM  |  Insert IOMMU if missing
+    lineinfile:
+      backrefs: true
+      path: /etc/default/grub
+      regexp: "^(GRUB_CMDLINE_LINUX_DEFAULT=\".*)\"$"
+      line: '\1 amd_iommu=on iommu=pt kvm.ignore_msrs=1"'
+    when: grub_cmdline_check.found == 0
+    notify: update grub
+
+  - name: KVM  |  Check if KVM fix is configured in the GRUB config
+    lineinfile:
+      backup: true
+      path: /etc/default/grub
+      regexp: '^GRUB_CMDLINE_LINUX_DEFAULT=".*earlymodules=vfio-pci video=efifb:off tsc=unstable trace_clock=local'
+      state: absent
+    check_mode: true
+    register: grub_cmdline_check
+    changed_when: false
+
+  - name: KVM  |  Insert KVM fix if missing
+    lineinfile:
+      backrefs: true
+      path: /etc/default/grub
+      regexp: "^(GRUB_CMDLINE_LINUX_DEFAULT=\".*)\"$"
+      line: '\1 earlymodules=vfio-pci video=efifb:off tsc=unstable trace_clock=local"'
+    when: grub_cmdline_check.found == 0
+    notify: update grub
+
+  - name: KVM  |  Check if screen off is configured in the GRUB config
+    lineinfile:
+      backup: true
+      path: /etc/default/grub
+      regexp: '^GRUB_CMDLINE_LINUX_DEFAULT=".*earlymodules=vfio-pci video=efifb:off'
+      state: absent
+    check_mode: true
+    register: grub_cmdline_check
+    changed_when: false
+
+  - name: KVM  |  Insert screen off if missing
+    lineinfile:
+      backrefs: true
+      path: /etc/default/grub
+      regexp: "^(GRUB_CMDLINE_LINUX_DEFAULT=\".*)\"$"
+      line: '\1 earlymodules=vfio-pci video=efifb:off"'
+    when: grub_cmdline_check.found == 0
+    notify: update grub
+        
+  when: ("AMD" in cpu_vendor)
+
+
+
+- block:
+
+  - name: KVM  |  Check if IOMMU is configured in the GRUB config
+    lineinfile:
+      backup: true
+      path: /etc/default/grub
+      regexp: '^GRUB_CMDLINE_LINUX_DEFAULT=".*intel_iommu=on,igfx_off kvm.ignore_msrs=1'
+      state: absent
+    check_mode: true
+    register: grub_cmdline_check
+    changed_when: false
+
+  - name: KVM  |  Insert IOMMU if missing
+    lineinfile:
+      backrefs: true
+      path: /etc/default/grub
+      regexp: "^(GRUB_CMDLINE_LINUX_DEFAULT=\".*)\"$"
+      line: '\1 intel_iommu=on,igfx_off kvm.ignore_msrs=1"'
+    when: grub_cmdline_check.found == 0
+    notify: update grub
+    
+
+  - name: KVM  |  Check if Intel i915 perfromance tunning is configured in the GRUB config
+    lineinfile:
+      backup: true
+      path: /etc/default/grub
+      regexp: '^GRUB_CMDLINE_LINUX_DEFAULT=".*dev.i915.perf_stream_paranoid=0'
+      state: absent
+    check_mode: true
+    register: grub_cmdline_check
+    changed_when: false
+
+  - name: KVM  |  Insert Intel i915 perfromance tunning if missing
+    lineinfile:
+      backrefs: true
+      path: /etc/default/grub
+      regexp: "^(GRUB_CMDLINE_LINUX_DEFAULT=\".*)\"$"
+      line: '\1 dev.i915.perf_stream_paranoid=0"'
+    when: grub_cmdline_check.found == 0
+    notify: update grub
+
+  when: ("Intel" in cpu_vendor)
+
+
+- name: KVM  |  List of GPU ids to disable
+  shell: "lspci -nnk | grep NVIDIA | rev | cut -d ']' -f2 | cut -d '[' -f1 | rev | sort -u | tr '\n' ',' | rev | cut -c2- | rev"
+  register: gpu_ids
+  changed_when: false
+
+- name: KVM  |  Check if GPUs are disabled
+#  lineinfile:
+#    path: /etc/modprobe.d/vfio.conf
+#    line: 'options vfio-pci ids={{ gpu_ids.stdout }}'
+  template:
+    src: vfio.conf.j2
+    dest: /etc/modprobe.d/vfio.conf
+
+- name: KVM  |  Load kernel driver
+  copy:
+    src: vfio-pci.conf
+    dest: /etc/modules-load.d/vfio-pci.conf
+
+
+
+- block:
+
+  - name: KVM  |  Removing NVidia propietary drivers
+    apt:
+      name: "nvidia-*"
+      state: absent
+  
+  - name: KVM  |  Disabling NVidia open source drivers
+    blockinfile:
+      path: /etc/modprobe.d/blacklist.conf
+      block: |
+        blacklist nouveau
+        options nouveau modeset-0
+
+  when: (ansible_distribution == 'Ubuntu')
+
+
+- name: KVM  |  Install KVM
+  apt:
+    name: [qemu-kvm, qemu-utils, libvirt-daemon-system, libvirt-clients, bridge-utils, virt-manager, ovmf]
+    state: latest
+    update_cache: yes
+
+- name: KVM  |  Install propietary firmware
+  apt:
+    name: firmware-realtek
+    state: latest
+    update_cache: yes
+  when: (ansible_distribution == 'Debian')

@@ -15,13 +15,13 @@
     - lm-sensors
     - unattended-upgrades
     - unrar # no disponible en debian por defecto
+    - hdparm
     #- unrar-free
     #- p7zip
     #- p7zip-full
 
-#- name: OS  |  Make grub faster
-#  lineinfile:
-#    path: /etc/default/grub
-#    regexp: '^GRUB_TIMEOUT=10'
-#    line: GRUB_TIMEOUT=1
-#  notify: update-grub
+- name: OS  |  Make grub faster
+  lineinfile:
+    path: /etc/default/grub
+    line: 'GRUB_RECORDFAIL_TIMEOUT=3'
+  notify: update-grub
