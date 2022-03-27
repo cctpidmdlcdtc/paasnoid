@@ -1,6 +1,10 @@
 ---
 - name: OS  |  Installing software
-  apt: pkg=iptables-persistent state=present
+  apt: pkg=iptables-persistent state=latest
+
+- name: Check that the somefile.conf exists
+  stat:
+    path: /etc/iptables/rules.v4
   register: output
   
 - block:
@@ -16,7 +20,7 @@
   - name: restart iptables
     service: name=netfilter-persistent state=restarted
 
-  when: output.changed
+  when: not output.stat.exists
 
 
 
