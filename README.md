@@ -60,7 +60,7 @@ In order to show the VPN config for _htpc_ client you can call ansible from outs
 Just run:
 
 ```shell
-$ vagrant ssh corcho -- '.local/bin/ansible-playbook -i /vagrant/hosts /vagrant/install.yml --tags build_ovpn -e "vpn_clients=htpc"' | sed 's/\\n/\n/g'
+$ vagrant ssh corcho -- '.local/bin/ansible-playbook -i /vagrant/hosts /vagrant/build_ovpn_client.yml -e "vpn_clients=htpc"' | sed 's/\\n/\n/g'
 ```
 
 ### Windows
@@ -68,7 +68,7 @@ $ vagrant ssh corcho -- '.local/bin/ansible-playbook -i /vagrant/hosts /vagrant/
 If you're on windows the output will be messed up, so you have to run two separate commands:
 
 ```shell
-C:\Users\luser\Downloads\paasnoid-0.1.0>vagrant ssh corcho -- '.local/bin/ansible-playbook -i /vagrant/hosts /vagrant/install.yml --tags build_ovpn -e "vpn_clients=htpc"'
+C:\Users\luser\Downloads\paasnoid-0.1.0>vagrant ssh corcho -- '.local/bin/ansible-playbook -i /vagrant/hosts /vagrant/build_ovpn_client.yml -e "vpn_clients=htpc"'
 C:\Users\luser\Downloads\paasnoid-0.1.0>vagrant ssh corcho -- 'cat /tmp/htpc.ovpn'
 ```
 
