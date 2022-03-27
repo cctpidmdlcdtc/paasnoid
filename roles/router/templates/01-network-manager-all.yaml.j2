@@ -1,7 +1,6 @@
-# Let NetworkManager manage all devices on this system
 network:
   version: 2
-  renderer: NetworkManager
+  renderer: networkd
   ethernets:
     {{ dev_WAN }}:
       dhcp4: no
