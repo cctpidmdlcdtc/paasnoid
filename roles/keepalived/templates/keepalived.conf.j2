@@ -1,7 +1,7 @@
 ! Configuration File for keepalived
 
 vrrp_instance VIP_WEB{
-	interface {{ dev_WAN }}
+	interface {{ dev_BRIDGE_WAN }}
 	state {{ virt_state }}
 	virtual_router_id 42
 	priority {{ virt_priority }}
