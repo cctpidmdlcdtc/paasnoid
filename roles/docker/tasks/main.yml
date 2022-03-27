@@ -1,19 +1,4 @@
 ---
-- name: docker  |  Removing previous versions
-  apt:
-    name:
-      - docker
-      - docker-engine
-      - docker.io
-      - containerd
-      - runc
-      - docker-ce
-      - docker-ce-cli
-      - docker-compose
-    state: absent
-  tags: [ never, uninstall ]
-
-
 
 - include: bionic-setup.yml
   when: (ansible_distribution == "Ubuntu" and ansible_distribution_release == 'bionic') or
