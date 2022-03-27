@@ -27,7 +27,7 @@
   become: true
   roles:
     - router
-    - keepalived # en inductor no funciona
+    - keepalived
   tags: router
 
 - name: Services running on the VPN
@@ -45,7 +45,7 @@
   become: true
   roles:
 #    - passbolt # ojo, db se pisa con otros nombres de host, no, no? a proxy-http le da igual? y no tiene https!!!
-#    - transmission
+    - transmission
     - emby
     - nextcloud
 #    - jellyfin

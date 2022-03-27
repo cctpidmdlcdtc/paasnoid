@@ -19,9 +19,9 @@
 #    line: net.ipv4.ip_forward=1
 #
 
-- name: Configure DHCP server
-  include: dhcp.yml
-  when: dhcp_enabled
+#- name: Configure DHCP server
+#  include: dhcp.yml
+#  when: dhcp_enabled
 
 
 - name: router  |  Apply iptables rules

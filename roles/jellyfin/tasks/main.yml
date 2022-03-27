@@ -19,9 +19,9 @@
     name: "{{ service_name }}"
     driver_options:
       com.docker.network.bridge.name: br-{{ service_name }}
-    ipam_options:
-      subnet: "{{ service_subnet }}"
-      gateway: "{{ service_gateway }}"
+    ipam_config:
+      - subnet: "{{ service_subnet }}"
+        gateway: "{{ service_gateway }}"
 
 - name: "{{ service_name }}  |  Get container info"
   docker_container_info:

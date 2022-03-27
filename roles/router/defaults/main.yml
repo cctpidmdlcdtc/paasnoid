@@ -23,7 +23,7 @@ dns2:           "8.8.4.4"
 
 ip_dhcp_first:  "10.0.42.100"
 ip_dhcp_last:   "10.0.42.200"
-dhcp_enabled|default(false)|bool: true
+#dhcp_enabled|default(false)|bool: true
 
 net_in: [
   '# {{ service_name }}',
