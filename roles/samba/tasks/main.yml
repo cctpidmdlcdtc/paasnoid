@@ -1,0 +1,18 @@
+---
+
+- name: Samba  |  Install Samba
+  apt:
+    name: samba
+    state: latest
+    update_cache: yes
+
+- name: Samba  |  Add shared folder
+  blockinfile:
+    path: /etc/samba/smb.conf
+    block: |
+      [Largo de aquí]
+      path = /docker-share
+      browseable = no
+      guest ok = no
+      writable = yes
+      valid users = ceon
