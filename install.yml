@@ -27,7 +27,7 @@
   become: true
   roles:
     - router
-#    - keepalived # en inductor no funciona
+    - keepalived # en inductor no funciona
   tags: router
 
 - name: Services running on the VPN
