@@ -13,7 +13,6 @@
   roles:
     - easy-rsa
     - vpn-server
-#    - pihole
   tags: vpn
 
 - name: Pi-hole setup
