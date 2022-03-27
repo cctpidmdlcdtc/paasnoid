@@ -165,7 +165,7 @@
     fw_net_nat: "{{ net_nat }}"
   when: "'nas' in group_names"  
 
-# es que esta tarea se tiene que ejecutar en el router solamente
+# this needs a loop so it uses every dns on the list, not just the first one
 - name: "{{ service_name }}  |  Add DNS to Pi-hole"
   lineinfile:
     path: /opt/pihole/etc-pihole/custom.list
