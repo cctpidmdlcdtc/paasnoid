@@ -25,3 +25,10 @@
     path: /etc/default/grub
     line: 'GRUB_RECORDFAIL_TIMEOUT=3'
   notify: update-grub
+
+
+- name: Configure bridge
+  include: bridge.yml
+
+- name: Flush handlers
+  meta: flush_handlers

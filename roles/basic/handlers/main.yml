@@ -1,4 +1,13 @@
 ---
 - name: update-grub
   shell: update-grub2
+
+- name: basic  |  Bring bridge interface up Debian
+  systemd:
+    state: restarted
+    name: networking
   
+- name: basic  |  Bring bridge interface up Ubuntu
+  systemd:
+    state: restarted
+    name: NetworkManager
