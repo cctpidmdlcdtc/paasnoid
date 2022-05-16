@@ -187,12 +187,12 @@
       command: php occ app:enable files_external
       user: www-data
     register: newapp
-    
+
   - name: "{{ service_name }}   |  Enable external storage"
     community.docker.docker_container_exec:
       container: "{{ service_name }}_{{ service_name }}_1"
       command: php occ files_external:import /tmp/external_storage.json
       user: www-data
-    when: newapp is defined
+    when: not newapp.stdout == "files_external already enabled"
 
   when: nextcloud_init is defined
