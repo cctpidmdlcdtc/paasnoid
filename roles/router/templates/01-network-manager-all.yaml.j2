@@ -28,7 +28,7 @@ network:
       nameservers:
         addresses: [{{ dns1 }}, {{ dns2 }}]
 {% if dev_LAN %}
-    {{ dev_BRIDGE }}:
+    {{ dev_BRIDGE_LAN }}:
       dhcp4: no
       dhcp6: no
       addresses: [{{ ip_BRIDGE }}/24, ]

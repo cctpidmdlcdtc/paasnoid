@@ -1,4 +1,4 @@
 # proxy-http
 # proxy-http querying lan
-#-A OUTPUT -o {{ dev_BRIDGE }} -p tcp -m multiport --dports 80,443 -m conntrack --ctstate NEW -j ACCEPT
+#-A OUTPUT -o {{ dev_BRIDGE_LAN }} -p tcp -m multiport --dports 80,443 -m conntrack --ctstate NEW -j ACCEPT
 -A OUTPUT -o br-{{ eth_hash }} -p tcp -m multiport --dports 80,443 -m conntrack --ctstate NEW -j ACCEPT

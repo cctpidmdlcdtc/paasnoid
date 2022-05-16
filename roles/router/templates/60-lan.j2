@@ -1,6 +1,6 @@
 {% if dev_LAN %}
-auto {{ dev_BRIDGE }}
-iface {{ dev_BRIDGE }} inet static
+auto {{ dev_BRIDGE_LAN }}
+iface {{ dev_BRIDGE_LAN }} inet static
 	bridge_ports {{ dev_LAN }}
 	address {{ ip_BRIDGE }}
 	netmask {{ mask_BRIDGE }}

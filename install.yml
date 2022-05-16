@@ -15,6 +15,7 @@
     - vpn-server
   tags: vpn
 
+# crear el bridge para la wan antes de pihole
 - name: Pi-hole setup
   hosts: router
   become: true

@@ -2,8 +2,8 @@
 Description=Access point and authentication server for Wi-Fi and Ethernet
 Documentation=man:hostapd(8)
 #After=network.target
-BindsTo=sys-subsystem-net-devices-{{ dev_BRIDGE }}.device
-After=sys-subsystem-net-devices-{{ dev_BRIDGE }}.device
+BindsTo=sys-subsystem-net-devices-{{ dev_BRIDGE_LAN }}.device
+After=sys-subsystem-net-devices-{{ dev_BRIDGE_LAN }}.device
 
 [Service]
 Type=forking

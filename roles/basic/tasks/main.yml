@@ -14,9 +14,9 @@
     - smartmontools
     - lm-sensors
     - unattended-upgrades
-    - unrar # no disponible en debian por defecto
-    - hdparm
+    #- unrar # no disponible en debian por defecto
     #- unrar-free
+    - hdparm
     #- p7zip
     #- p7zip-full
 

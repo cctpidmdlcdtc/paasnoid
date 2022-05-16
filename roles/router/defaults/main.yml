@@ -13,7 +13,7 @@ dev_LAN:        "eth1"
 dev_WLAN:       "wlan0"
 ap_enabled:      false
 
-dev_BRIDGE:     "br0"
+dev_BRIDGE_LAN:     "br0"
 ip_BRIDGE:      "10.0.42.1"
 mask_BRIDGE:    "255.255.255.0"
 net_BRIDGE:     "10.0.42.0"
@@ -28,14 +28,14 @@ ip_dhcp_last:   "10.0.42.200"
 net_in: [
   '# {{ service_name }}',
   '# dhcp server gives ip to clients',
-  '-A UDP -i {{ dev_BRIDGE }} -p udp -m udp --dport 67 -m conntrack --ctstate NEW -j ACCEPT',
+  '-A UDP -i {{ dev_BRIDGE_LAN }} -p udp -m udp --dport 67 -m conntrack --ctstate NEW -j ACCEPT',
   '# proxy-http gives access to docker services',
   '-A TCP -i {{ dev_VPN }} -p tcp -m tcp --dport 80 -m conntrack --ctstate NEW -j ACCEPT'
 ]
 net_out: [
   '# {{ service_name }}',
   '# ssh from router to hosts on lan',
-  '-A OUTPUT -o {{ dev_BRIDGE }} -p tcp -m tcp --dport 22 -m conntrack --ctstate NEW -j ACCEPT'
+  '-A OUTPUT -o {{ dev_BRIDGE_LAN }} -p tcp -m tcp --dport 22 -m conntrack --ctstate NEW -j ACCEPT'
 ]
 net_forward: []
 net_nat: []

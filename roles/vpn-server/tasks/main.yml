@@ -19,7 +19,8 @@
       path: /etc/openvpn/server/client-config
       state: directory
       mode: '0500'
-  
+
+# necesita el enabled antes del restart?
   - name: vpn  |  Configuring openvpn server
     template: src=vpn-server.conf.j2 dest=/etc/openvpn/{{ name_VPN }}.conf owner=root group=root mode=0400
     notify:

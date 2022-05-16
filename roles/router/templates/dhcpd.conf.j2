@@ -8,7 +8,7 @@ max-lease-time 7200;
 ddns-update-style none;
 
 subnet {{ net_BRIDGE }} netmask {{ mask_BRIDGE }} {
-	interface {{ dev_BRIDGE }};
+	interface {{ dev_BRIDGE_LAN }};
 	range {{ ip_dhcp_first }} {{ ip_dhcp_last }};
 	option routers {{ ip_BRIDGE }};
 }
