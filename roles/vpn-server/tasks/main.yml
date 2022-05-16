@@ -23,8 +23,9 @@
 # necesita el enabled antes del restart?
   - name: vpn  |  Configuring openvpn server
     template: src=vpn-server.conf.j2 dest=/etc/openvpn/{{ name_VPN }}.conf owner=root group=root mode=0400
-    notify:
-    - restart openvpn@{{ name_VPN }}
+#    notify:
+#    - restart openvpn@{{ name_VPN }}
+    register: newconfig
   
   when: not restore_backup
 
@@ -36,6 +37,13 @@
   notify:
   - restart openvpn@{{ name_VPN }}
 
+- name: vpn  |  Ensure OpenVPN is restarted
+  service:
+    name: "openvpn@{{ name_VPN }}"
+    state: started
+    enabled: true
+    daemon_reload: yes
+  when: newconfig.changed
 
 - name: vpn  |  Ensure OpenVPN is started
   service:

@@ -170,6 +170,10 @@
 
 - block:
 
+  - name: "{{ service_name }}  |  Pause for a few seconds to finish config file"
+    pause:
+      seconds: 30
+      
   - name: "{{ service_name }}  |  Add DNS or Nextcloud won't let you log in"
     lineinfile:
       path: /var/lib/docker/volumes/nextcloud_config/_data/config.php
@@ -182,11 +186,13 @@
       container: "{{ service_name }}_{{ service_name }}_1"
       command: php occ app:enable files_external
       user: www-data
+    register: newapp
     
   - name: "{{ service_name }}   |  Enable external storage"
     community.docker.docker_container_exec:
       container: "{{ service_name }}_{{ service_name }}_1"
       command: php occ files_external:import /tmp/external_storage.json
       user: www-data
+    when: newapp is defined
 
   when: nextcloud_init is defined
