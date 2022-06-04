@@ -1,18 +1,18 @@
 ---
-- name: proxy-http  |  Create destiny
+- name: "{{ proxy_service_name }}  |  Create destiny"
   file:
     path: "{{ item }}"
     state: directory
     mode: '0750'
   with_items:
-    - /opt/proxy-http
-    - /opt/proxy-http/conf.d
-    - /opt/proxy-http/fragments
+    - "/opt/{{ proxy_service_name }}"
+    - "/opt/{{ proxy_service_name }}/conf.d"
+    - "/opt/{{ proxy_service_name }}/fragments"
 
-- name: proxy-http  |  Copy docker-compose main fragments
+- name: "{{ proxy_service_name }}  |  Copy docker-compose main fragments"
   template: 
     src: docker_compose/{{ item }}_block.yml.j2
-    dest: /opt/proxy-http/fragments/{{ item }}_block.yml
+    dest: /opt/{{ proxy_service_name }}/fragments/{{ item }}_block.yml
     owner: root
     group: root
     mode: 0600 
@@ -22,72 +22,86 @@
     - 5_end
   register: newdocker
 
-- name: proxy-http  |  Copy docker-compose service fragments 1/2
+- name: "{{ proxy_service_name }}  |  Copy docker-compose service fragments 1/2"
   template: 
     src: docker_compose/2_network_block.yml.j2
-    dest: /opt/proxy-http/fragments/2_{{ service_name }}.yml
+    dest: /opt/{{ proxy_service_name }}/fragments/2_{{ service_name }}.yml
     owner: root
     group: root
     mode: 0600 
   register: newdocker
 
-- name: proxy-http  |  Copy docker-compose service fragments 2/2
+- name: "{{ proxy_service_name }}  |  Copy docker-compose service fragments 2/2"
   template: 
     src: docker_compose/4_service_block.yml.j2
-    dest: /opt/proxy-http/fragments/4_{{ service_name }}.yml
+    dest: /opt/{{ proxy_service_name }}/fragments/4_{{ service_name }}.yml
     owner: root
     group: root
     mode: 0600 
   register: newdocker
 
-- name: proxy-http  |  Assemble docker-compose
+- name: "{{ proxy_service_name }}  |  Assemble docker-compose"
   assemble:
-    src: /opt/proxy-http/fragments
-    dest: /opt/proxy-http/docker-compose.yml
+    src: /opt/{{ proxy_service_name }}/fragments
+    dest: /opt/{{ proxy_service_name }}/docker-compose.yml
     owner: root
     group: root
     mode: 0600 
   register: newdocker
 
-- name: proxy-http  |  Copy default config
+- name: "{{ proxy_service_name }}  |  Copy default config"
   copy: 
     src: default.conf
-    dest: /opt/proxy-http/conf.d/
+    dest: /opt/{{ proxy_service_name }}/conf.d/
     owner: root
     group: root
     mode: 0600 
   register: newdocker
 
-- name: proxy-http  |  Create virtualhosts
+- name: "{{ proxy_service_name }}  |  Create virtualhosts"
   template: 
     src: virtualhost.conf.j2
-    dest: /opt/proxy-http/conf.d/{{ service_name }}.conf
+    dest: /opt/{{ proxy_service_name }}/conf.d/{{ service_name }}.conf
     owner: root
     group: root
     mode: 0604
   register: newdocker
 
-- name: proxy-http  |  Tear down existing services
+- name: "{{ proxy_service_name }}  |  Create a network with pretty name"
+  docker_network:
+    name: "{{ proxy_service_name }}"
+    driver_options:
+      com.docker.network.bridge.name: br-{{ proxy_service_name }}
+    ipam_config:
+      - subnet: "{{ proxy_service_subnet }}"
+        gateway: "{{ proxy_service_gateway }}"
+
+- name: "{{ proxy_service_name }}  |  Get container info"
+  docker_container_info:
+    name: "{{ proxy_service_name }}_{{ proxy_service_name }}_1"
+  register: result
+  
+- name: "{{ proxy_service_name }}  |  Tear down existing services"
   docker_compose:
-    project_src: /opt/proxy-http
+    project_src: "/opt/{{ proxy_service_name }}"
     #remove_images: yes
     remove_volumes: yes
     state: absent
-  when: newdocker.changed
-    
-- name: proxy-http  |  Create and start services
-  docker_compose:
-    project_src: /opt/proxy-http
-  #when: newdocker.changed
+  when: not result.exists
 
-#- name: proxy-http  |  Apply iptables rules
+- name: "{{ proxy_service_name }}  |  Create and start services"
+  docker_compose:
+    project_src: "/opt/{{ proxy_service_name }}"
+  when: newdocker.changed
+
+#- name: "{{ proxy_service_name }}  |  Apply iptables rules"
 #  include_role:
 #    name: firewall
 #
-- name: proxy-http  |  Copy iptables service fragments
+- name: "{{ proxy_service_name }}  |  Copy iptables service fragments"
   template: 
-    src: rules_proxy-http.v4
-    dest: /root/iptables-fragments/03_proxy-http
+    src: rules.v4
+    dest: /root/iptables-fragments/03_{{ proxy_service_name }}
     owner: root
     group: root
     mode: 0600 

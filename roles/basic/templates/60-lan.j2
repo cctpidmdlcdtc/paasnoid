@@ -5,6 +5,8 @@ iface {{ dev_BRIDGE_LAN }} inet static
 	address {{ ip_BRIDGE }}
 	netmask {{ mask_BRIDGE }}
 	network {{ net_BRIDGE }}
+{% if dev_WLAN %}
 #	post-up ifup {{ dev_WLAN }}
 #	pre-down ifdown {{ dev_WLAN }}
+{% endif %}
 {% endif %}

@@ -100,13 +100,13 @@
 - name: "{{ service_name }}  |  Create custom DNS file"
   copy:
     content: ""
-    dest: /opt/pihole/etc-pihole/custom.list
+    dest: "/opt/{{ service_name }}/etc-pihole/custom.list"
     force: no
 
 # es que esta tarea se tiene que ejecutar en el router solamente
 - name: "{{ service_name }}  |  Add DNS to Pi-hole"
   lineinfile:
-    path: /opt/pihole/etc-pihole/custom.list
+    path: "/opt/{{ service_name }}/etc-pihole/custom.list"
     state: present
     regexp: '^{{ ip_VPN }} {{ item[0].name }}'
     line: '{{ ip_VPN }} {{ item[0].name }}'

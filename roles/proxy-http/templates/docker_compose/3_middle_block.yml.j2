@@ -8,4 +8,4 @@ services:
       - ./conf.d:/etc/nginx/conf.d
       #- ./htpasswd:/etc/nginx/htpasswd
     networks:
-      - proxy
+      - {{ proxy_service_name }}

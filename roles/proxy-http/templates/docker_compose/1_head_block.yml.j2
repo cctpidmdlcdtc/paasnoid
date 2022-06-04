@@ -1,5 +1,6 @@
 version: '2'
 
 networks:
-  proxy:
-    driver: bridge
+  {{ proxy_service_name }}:
+    external:
+      name: {{ proxy_service_name }}

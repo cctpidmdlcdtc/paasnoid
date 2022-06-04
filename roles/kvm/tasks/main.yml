@@ -125,21 +125,25 @@
   shell: "lspci -nnk | grep NVIDIA | rev | cut -d ']' -f2 | cut -d '[' -f1 | rev | sort -u | tr '\n' ',' | rev | cut -c2- | rev"
   register: gpu_ids
   changed_when: false
+  tags: paco
+  
+- block:
 
-- name: KVM  |  Check if GPUs are disabled
-#  lineinfile:
-#    path: /etc/modprobe.d/vfio.conf
-#    line: 'options vfio-pci ids={{ gpu_ids.stdout }}'
-  template:
-    src: vfio.conf.j2
-    dest: /etc/modprobe.d/vfio.conf
+  - name: KVM  |  Check if GPUs are disabled
+  #  lineinfile:
+  #    path: /etc/modprobe.d/vfio.conf
+  #    line: 'options vfio-pci ids={{ gpu_ids.stdout }}'
+    template:
+      src: vfio.conf.j2
+      dest: /etc/modprobe.d/vfio.conf
 
-- name: KVM  |  Load kernel driver
-  copy:
-    src: vfio-pci.conf
-    dest: /etc/modules-load.d/vfio-pci.conf
+  - name: KVM  |  Load kernel driver
+    copy:
+      src: vfio-pci.conf
+      dest: /etc/modules-load.d/vfio-pci.conf
 
-
+  when: gpu_ids.changed
+  tags: paco
 
 - block:
 
