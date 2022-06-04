@@ -46,10 +46,10 @@
   become: true
   roles:
 #    - passbolt # ojo, db se pisa con otros nombres de host, no, no? a proxy-http le da igual? y no tiene https!!!
-    - transmission
-    - emby
+    #- transmission
+    #- emby
     - nextcloud
-#    - jellyfin
+#    - jellyfin: da errores
   tags: external
 
 #- name: Services floating
@@ -114,6 +114,8 @@
 #  roles:
 #    - nat-http
 #  tags: nat
+
+
 
 - name: KVM
   hosts: all
