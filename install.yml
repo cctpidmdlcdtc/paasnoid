@@ -117,9 +117,9 @@
 
 
 
-- name: KVM
-  hosts: all
-  become: true
-  roles:
-    - kvm
-  tags: kvm
+#- name: KVM
+#  hosts: all
+#  become: true
+#  roles:
+#    - kvm
+#  tags: kvm
