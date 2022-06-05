@@ -1,6 +1,6 @@
 {% for virtualhost in virtualhosts %}
 server {
-    listen       80;
+    listen       443 ssl;
     server_name  {{ virtualhost.name }};
 
     #auth_basic           "You can run but you can't hide";
@@ -11,8 +11,11 @@ server {
         root   /usr/share/nginx/html;
     }
 
+    ssl_certificate /etc/ssl/certs/{{ virtualhost.name }}.crt;
+    ssl_certificate_key /etc/ssl/{{ virtualhost.name }}.key;
+
     location / {
-        proxy_pass http://{{ virtualhost.destination }}/;
+        proxy_pass {{ virtualhost.destination }}/;
         proxy_set_header Host $host;
         proxy_set_header X-Real-IP $remote_addr;
         proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;

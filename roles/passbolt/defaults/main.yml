@@ -18,4 +18,4 @@ net_nat: []
 
 services:
   - name: "{{ service_name }}.{{ name_VPN|lower }}.vpn"
-    destination: "{{ service_name }}:80"
+    destination: "https://{{ service_name }}:443"

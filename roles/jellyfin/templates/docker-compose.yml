@@ -15,7 +15,7 @@ services:
     container_name: {{ service_name }}
     expose:
       - 8096
-      #- 8920
+      - 8920
       - 1900
       -  7359/udp
     restart: always

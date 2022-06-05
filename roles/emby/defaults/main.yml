@@ -7,7 +7,7 @@ br_output: "br-{{ service_name }}"
 net_in: []
 net_out: [
   '# {{ service_name }}',
-  '-A OUTPUT -o {{ br_output }} -p tcp -m tcp --dport 80 -m conntrack --ctstate NEW -j ACCEPT'
+  '-A OUTPUT -o {{ br_output }} -p tcp -m multiport --dports 80,443 -m conntrack --ctstate NEW -j ACCEPT'
 ]
 net_forward: [
   '# {{ service_name }}',
@@ -22,7 +22,7 @@ net_nat: []
 # router
 services:
   - name: "{{ service_name }}.{{ name_VPN|lower }}.vpn"
-    destination: "{{ service_name }}:8096"
+    destination: "http://{{ service_name }}:8096"
 
 # nas
 #services:

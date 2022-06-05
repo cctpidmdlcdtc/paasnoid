@@ -28,6 +28,6 @@ nextcloud_dns:                  "nube.{{ name_VPN|lower }}.vpn"
 
 services:
   - name: "nube.{{ name_VPN|lower }}.vpn"
-    destination: "{{ service_name }}:80"
+    destination: "http://{{ service_name }}:80"
 #  - name: "collabora.{{ name_VPN|lower }}.vpn"
 #    destination: office:9980

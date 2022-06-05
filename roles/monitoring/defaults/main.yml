@@ -27,10 +27,10 @@ net_nat: []
 
 services:
   - name: "prometheus.{{ name_VPN|lower }}.vpn"
-    destination: prometheus:9090
+    destination: http://prometheus:9090
   - name: "alertmanager.{{ name_VPN|lower }}.vpn"
-    destination: alertmanager:9093
+    destination: http://alertmanager:9093
   - name: "grafana.{{ name_VPN|lower }}.vpn"
-    destination: grafana:3000
+    destination: http://grafana:3000
   - name: "cadvisor.{{ name_VPN|lower }}.vpn"
-    destination: cadvisor:8080
+    destination: http://cadvisor:8080

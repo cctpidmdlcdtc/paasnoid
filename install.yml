@@ -45,11 +45,11 @@
   hosts: router
   become: true
   roles:
-    - passbolt # ojo, db se pisa con otros nombres de host, no, no? a proxy-http le da igual? y no tiene https!!!
-#    - transmission
-#    - emby
-#    - nextcloud
-#    - jellyfin: da errores
+    - passbolt
+    - transmission
+    - emby
+    - nextcloud
+#    - jellyfin: da errores, emby funciona mejor
   tags: external
 
 #- name: Services floating

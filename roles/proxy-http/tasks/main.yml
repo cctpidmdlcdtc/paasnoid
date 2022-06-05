@@ -8,6 +8,8 @@
     - "/opt/{{ proxy_service_name }}"
     - "/opt/{{ proxy_service_name }}/conf.d"
     - "/opt/{{ proxy_service_name }}/fragments"
+    - "/opt/{{ proxy_service_name }}/ssl"
+    - "/opt/{{ proxy_service_name }}/ssl/certs"
 
 - name: "{{ proxy_service_name }}  |  Copy docker-compose main fragments"
   template: 
@@ -50,8 +52,8 @@
   register: newdocker
 
 - name: "{{ proxy_service_name }}  |  Copy default config"
-  copy: 
-    src: default.conf
+  template: 
+    src: 00-default.conf
     dest: /opt/{{ proxy_service_name }}/conf.d/
     owner: root
     group: root
@@ -66,6 +68,67 @@
     group: root
     mode: 0604
   register: newdocker
+
+
+
+- name: "{{ proxy_service_name }}  |  Generate an OpenSSL private key with the default values (4096 bits, RSA) for proxied app"
+  openssl_privatekey:
+    path: /opt/{{ proxy_service_name }}/ssl/{{ item.name }}.key
+  with_items: "{{ virtualhosts }}"
+
+- name: "{{ proxy_service_name }}  |  Generate an OpenSSL Certificate Signing Request with subjectAltName extension for proxied app"
+  openssl_csr:
+    path: /opt/{{ proxy_service_name }}/ssl/{{ item.name }}.csr
+    privatekey_path: /opt/{{ proxy_service_name }}/ssl/{{ item.name }}.key
+    country_name: ES
+    organization_name: "{{ name_VPN }}"
+    organizational_unit_name: Sistemas
+    email_address: a@a.com
+    common_name: "{{ item.name }}"
+    subject_alt_name: 'DNS:{{ item.name }}'
+  with_items: "{{ virtualhosts }}"
+
+- name: "{{ proxy_service_name }}  |  Generate a Self Signed OpenSSL certificate for proxied app"
+  openssl_certificate:
+    path: /opt/{{ proxy_service_name }}/ssl/certs/{{ item.name }}.crt
+    privatekey_path: /opt/{{ proxy_service_name }}/ssl/{{ item.name }}.key
+    csr_path: /opt/{{ proxy_service_name }}/ssl/{{ item.name }}.csr
+    provider: selfsigned
+    owner: root
+    group: root
+    mode: 0604
+  register: newdocker
+  with_items: "{{ virtualhosts }}"
+
+
+
+- name: "{{ proxy_service_name }}  |  Generate an OpenSSL private key with the default values (4096 bits, RSA) for the default https virtualhost"
+  openssl_privatekey:
+    path: /opt/{{ proxy_service_name }}/ssl/{{ name_VPN|lower }}.vpn.key
+
+- name: "{{ proxy_service_name }}  |  Generate an OpenSSL Certificate Signing Request with subjectAltName extension for the default https virtualhost"
+  openssl_csr:
+    path: /opt/{{ proxy_service_name }}/ssl/{{ name_VPN|lower }}.vpn.csr
+    privatekey_path: /opt/{{ proxy_service_name }}/ssl/{{ name_VPN|lower }}.vpn.key
+    country_name: ES
+    organization_name: "{{ name_VPN }}"
+    organizational_unit_name: Sistemas
+    email_address: a@a.com
+    common_name: "{{ name_VPN|lower }}.vpn"
+    subject_alt_name: 'DNS:{{ name_VPN|lower }}.vpn'
+
+- name: "{{ proxy_service_name }}  |  Generate a Self Signed OpenSSL certificate for the default https virtualhost"
+  openssl_certificate:
+    path: /opt/{{ proxy_service_name }}/ssl/certs/{{ name_VPN|lower }}.vpn.crt
+    privatekey_path: /opt/{{ proxy_service_name }}/ssl/{{ name_VPN|lower }}.vpn.key
+    csr_path: /opt/{{ proxy_service_name }}/ssl/{{ name_VPN|lower }}.vpn.csr
+    provider: selfsigned
+    owner: root
+    group: root
+    mode: 0604
+  register: newdocker
+
+
 
 - name: "{{ proxy_service_name }}  |  Create a network with pretty name"
   docker_network:

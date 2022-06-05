@@ -181,6 +181,13 @@
       insertafter: "^    0 => 'localhost'"
       line: "    1 => '{{ services[0].name }}',"
 
+  - name: "{{ service_name }}  |  Add DNS or Nextcloud won't let you log in with https"
+    lineinfile:
+      path: /var/lib/docker/volumes/nextcloud_config/_data/config.php
+      regexp: "^    2 => 'https://{{ services[0].name }}',"
+      insertafter: "^    1 => '{{ services[0].name }}',"
+      line: "    2 => 'https://{{ services[0].name }}',"
+
   - name: "{{ service_name }}   |  Install external storage app"
     community.docker.docker_container_exec:
       container: "{{ service_name }}_{{ service_name }}_1"

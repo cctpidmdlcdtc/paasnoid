@@ -3,9 +3,11 @@ services:
   nginx:
     image: nginx:alpine
     ports:
-      - "{{ ip_host_listen }}:80:80"
+      #- "{{ ip_host_listen }}:80:80"
+      - "{{ ip_host_listen }}:443:443"
     volumes:
       - ./conf.d:/etc/nginx/conf.d
       #- ./htpasswd:/etc/nginx/htpasswd
+      - ./ssl:/etc/ssl
     networks:
       - {{ proxy_service_name }}

@@ -12,7 +12,7 @@
     services:
       - name: transmission.{{ name_VPN | lower }}.vpn
 #        destination: '10.0.42.168'
-        destination: transmission.chovelle.{{ name_VPN | lower }}.vpn
+        destination: https://transmission.chovelle.{{ name_VPN | lower }}.vpn
 
 - name: proxy-http  |  Copy proxy config
   include_role:
@@ -26,7 +26,7 @@
     services:
       - name: emby.{{ name_VPN | lower }}.vpn
 #        destination: '10.0.42.168'
-        destination: emby.chovelle.{{ name_VPN | lower }}.vpn
+        destination: https://emby.chovelle.{{ name_VPN | lower }}.vpn
 
 - name: proxy-http  |  Copy proxy config
   include_role:

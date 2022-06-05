@@ -39,7 +39,7 @@ net_nat: [
 # router
 services:
   - name: "{{ service_name }}.{{ name_VPN|lower }}.vpn"
-    destination: "{{ service_name|lower }}:9091"
+    destination: "http://{{ service_name|lower }}:9091"
 
 # nas
 #services:
