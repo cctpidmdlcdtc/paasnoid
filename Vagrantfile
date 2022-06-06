@@ -14,7 +14,7 @@ systemctl restart sshd
 su - vagrant -c 'ansible-playbook -i /vagrant/hosts /vagrant/install.yml --limit corcho'
 
 # Create VPN config for clients
-su - vagrant -c 'ansible-playbook -i /vagrant/hosts /vagrant/build_ovpn_client.yml --limit corcho'
+su - vagrant -c 'ansible-playbook -i /vagrant/hosts /vagrant/build_openvpn_client.yml --limit corcho'
 
 # You'll need to configure Emby to use /docker-share
 
