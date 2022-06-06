@@ -30,7 +30,7 @@ net_out: [
   '-A OUTPUT -o {{ dev_BRIDGE_LAN }} -p udp -m udp -m multiport --dports 47998,47999,48000,48010 -j ACCEPT',
   '# just when host is Ubuntu',
   '-A OUTPUT -o lo -p udp -m udp --dport 53 -m conntrack --ctstate NEW -j ACCEPT',
-  '-A OUTPUT -o lo -p tcp -m tcp --dport 80 -m conntrack --ctstate NEW -j ACCEPT',
+  '-A OUTPUT -o lo -p tcp -m tcp --dport 443 -m conntrack --ctstate NEW -j ACCEPT',
   '-A OUTPUT -o {{ dev_BRIDGE_LAN }} -p tcp -m tcp -m multiport --dports 47984,47989,48010 -j ACCEPT',
   '-A OUTPUT -o {{ dev_BRIDGE_LAN }} -p udp -m udp -m multiport --dports 47998,47999,48000,48010 -j ACCEPT',
   '-A OUTPUT -o {{ dev_BRIDGE_WAN }} -p tcp -m tcp -m multiport --dports 47984,47989,48010 -j ACCEPT',
