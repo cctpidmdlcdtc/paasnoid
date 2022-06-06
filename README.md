@@ -14,6 +14,12 @@ You need these apps installed on your computer:
 - [VirtualBox](https://www.virtualbox.org/wiki/Downloads)
 - [Vagrant](https://www.vagrantup.com/downloads.html)
 
+On Ubuntu just run:
+
+```shell
+sudo apt install virtualbox vagrant
+```
+
 ### Install
 
 In order to setup the VPN gateway, private cloud and streaming service just run:
