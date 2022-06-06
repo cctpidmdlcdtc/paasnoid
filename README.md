@@ -4,7 +4,7 @@ A paranoid approach to a PaaS.
 
 # Requirements
 
-paasnoid can be run on your current Debian based system, but it can also run inside its own VM on Windows/Mac computers.
+paasnoid can run on your current Debian based system, but it can also run inside its own VM on Windows/Mac computers.
 
 ## Virtual machine
 
