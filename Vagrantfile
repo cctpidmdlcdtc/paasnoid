@@ -2,7 +2,7 @@ $script = <<-SCRIPT
 
 # Install Ansible inside corcho
 apt-get update
-apt-get install -y python3-pip sshpass
+apt-get install -y python3-pip sshpass python3-cryptography
 su - vagrant -c 'pip3 install --user ansible jmespath'
 su - vagrant -c 'ansible-galaxy collection install community.docker'
 
