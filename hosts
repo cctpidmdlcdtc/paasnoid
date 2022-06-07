@@ -2,7 +2,6 @@
 ansible_ssh_common_args='-o StrictHostKeyChecking=no'
 
 [router]
-#inductor ansible_host=65.108.156.122 ansible_user=root
 corcho ansible_connection=local
 
 #[nas]

@@ -34,6 +34,9 @@ iface {{ dev_WLAN }} inet manual
 {% endif %}
 
 {% if dev_LAN %}
+allow-hotplug {{ dev_LAN }}
+iface {{ dev_LAN }} inet manual
+
 auto {{ dev_BRIDGE_LAN }}
 iface {{ dev_BRIDGE_LAN }} inet static
 	bridge_ports {{ dev_LAN }}
