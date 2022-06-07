@@ -22,7 +22,7 @@
     - 1_head
     - 3_middle
     - 5_end
-  register: newdocker
+  notify: "{{ proxy_service_name }}  |  Create and start services"
 
 - name: "{{ proxy_service_name }}  |  Copy docker-compose service fragments 1/2"
   template: 
@@ -31,7 +31,7 @@
     owner: root
     group: root
     mode: 0600 
-  register: newdocker
+  notify: "{{ proxy_service_name }}  |  Create and start services"
 
 - name: "{{ proxy_service_name }}  |  Copy docker-compose service fragments 2/2"
   template: 
@@ -40,7 +40,7 @@
     owner: root
     group: root
     mode: 0600 
-  register: newdocker
+  notify: "{{ proxy_service_name }}  |  Create and start services"
 
 - name: "{{ proxy_service_name }}  |  Assemble docker-compose"
   assemble:
@@ -49,7 +49,7 @@
     owner: root
     group: root
     mode: 0600 
-  register: newdocker
+  notify: "{{ proxy_service_name }}  |  Create and start services"
 
 - name: "{{ proxy_service_name }}  |  Copy default config"
   template: 
@@ -58,7 +58,7 @@
     owner: root
     group: root
     mode: 0600 
-  register: newdocker
+  notify: "{{ proxy_service_name }}  |  Create and start services"
 
 - name: "{{ proxy_service_name }}  |  Create virtualhosts"
   template: 
@@ -67,7 +67,7 @@
     owner: root
     group: root
     mode: 0604
-  register: newdocker
+  notify: "{{ proxy_service_name }}  |  Create and start services"
 
 
 
@@ -75,6 +75,7 @@
   openssl_privatekey:
     path: /opt/{{ proxy_service_name }}/ssl/{{ item.name }}.key
   with_items: "{{ virtualhosts }}"
+  notify: "{{ proxy_service_name }}  |  Create and start services"
 
 - name: "{{ proxy_service_name }}  |  Generate an OpenSSL Certificate Signing Request with subjectAltName extension for proxied app"
   openssl_csr:
@@ -87,6 +88,7 @@
     common_name: "{{ item.name }}"
     subject_alt_name: 'DNS:{{ item.name }}'
   with_items: "{{ virtualhosts }}"
+  notify: "{{ proxy_service_name }}  |  Create and start services"
 
 - name: "{{ proxy_service_name }}  |  Generate a Self Signed OpenSSL certificate for proxied app"
   openssl_certificate:
@@ -97,7 +99,7 @@
     owner: root
     group: root
     mode: 0604
-  register: newdocker
+  notify: "{{ proxy_service_name }}  |  Create and start services"
   with_items: "{{ virtualhosts }}"
 
 
@@ -105,6 +107,7 @@
 - name: "{{ proxy_service_name }}  |  Generate an OpenSSL private key with the default values (4096 bits, RSA) for the default https virtualhost"
   openssl_privatekey:
     path: /opt/{{ proxy_service_name }}/ssl/{{ name_VPN|lower }}.vpn.key
+  notify: "{{ proxy_service_name }}  |  Create and start services"
 
 - name: "{{ proxy_service_name }}  |  Generate an OpenSSL Certificate Signing Request with subjectAltName extension for the default https virtualhost"
   openssl_csr:
@@ -116,6 +119,7 @@
     email_address: a@a.com
     common_name: "{{ name_VPN|lower }}.vpn"
     subject_alt_name: 'DNS:{{ name_VPN|lower }}.vpn'
+  notify: "{{ proxy_service_name }}  |  Create and start services"
 
 - name: "{{ proxy_service_name }}  |  Generate a Self Signed OpenSSL certificate for the default https virtualhost"
   openssl_certificate:
@@ -126,7 +130,7 @@
     owner: root
     group: root
     mode: 0604
-  register: newdocker
+  notify: "{{ proxy_service_name }}  |  Create and start services"
 
 
 
@@ -151,11 +155,6 @@
     remove_volumes: yes
     state: absent
   when: not result.exists
-
-- name: "{{ proxy_service_name }}  |  Create and start services"
-  docker_compose:
-    project_src: "/opt/{{ proxy_service_name }}"
-  when: newdocker.changed
 
 #- name: "{{ proxy_service_name }}  |  Apply iptables rules"
 #  include_role:
