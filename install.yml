@@ -22,7 +22,7 @@
     - pihole
   tags: pihole
 
-- name: router setup
+- name: Routing stuff
   hosts: router
   become: true
   roles:

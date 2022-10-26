@@ -1,2 +1,4 @@
 dns1:           "8.8.8.8"
 dns2:           "8.8.4.4"
+dev_WLAN:       "wlan0"
+ap_enabled:     false
