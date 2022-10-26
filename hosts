@@ -2,6 +2,7 @@
 ansible_ssh_common_args='-o StrictHostKeyChecking=no'
 
 [router]
-corcho ansible_connection=local
+#corcho ansible_connection=local
+corcho ansible_host=10.8.2.1 ansible_user=ceon ansible_password='pARsi10!' ansible_sudo_pass='pARsi10!'
 
 #[nas]

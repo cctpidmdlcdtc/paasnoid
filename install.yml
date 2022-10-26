@@ -15,7 +15,6 @@
     - vpn-server
   tags: vpn
 
-# crear el bridge para la wan antes de pihole
 - name: Pi-hole setup
   hosts: router
   become: true
@@ -45,11 +44,10 @@
   hosts: router
   become: true
   roles:
-    - passbolt
-    - transmission
-    - emby
+#    - passbolt
+#    - transmission
+#    - emby
     - nextcloud
-#    - jellyfin: da errores, emby funciona mejor
   tags: external
 
 #- name: Services floating

@@ -7,7 +7,7 @@ net_VPN:        "10.8.1.0/24"
 VPN_port:       "1194"
 ip_VPN_min:     "10.8.1.2"
 ip_VPN_max:     "10.8.1.10"
-name_VPN:       "paasnoid"
+name_VPN:       "qdpaas"
 
 easy_rsa_dir:                   "/usr/share/easy-rsa"
 

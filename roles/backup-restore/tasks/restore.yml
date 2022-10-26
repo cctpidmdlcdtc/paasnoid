@@ -15,7 +15,7 @@
   
 - name: Restore volume
   docker_container:
-    name: backup_paasnoid
+    name: backup_qdpaas
     image: alpine
     volumes:
       - "{{ docker_volume }}:/volume"
@@ -25,13 +25,13 @@
 # too fast to catch
 #- name: Wait for the restore to start
 #  docker_container_info:
-#    name: backup_paasnoid
+#    name: backup_qdpaas
 #  register: result
 #  until: result.container.State.Status == 'running'
 
 - name: Wait 30 minutes for the restore to complete
   docker_container_info:
-    name: backup_paasnoid
+    name: backup_qdpaas
   register: result
   retries: 600
   until: result.container.State.Status == 'exited'

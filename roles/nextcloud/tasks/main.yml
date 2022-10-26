@@ -192,7 +192,7 @@
     lineinfile:
       path: /var/lib/docker/volumes/nextcloud_config/_data/config.php
       regexp: "^  'overwriteprotocol' => 'https',"
-      insertafter: "^$CONFIG = array ("
+      insertafter: '^\$CONFIG = array \($'
       line: "  'overwriteprotocol' => 'https',"
 
 

@@ -7,7 +7,7 @@ EASYRSA_REQ_OU:                 "IT"
 EASYRSA_NS_COMMENT:             "wtf_ns_comment_como_req_org"
 
 easy_rsa_dir:                   "/usr/share/easy-rsa"
-name_VPN:                       "paasnoid"
+name_VPN:                       "qdpaas"
 
 easy_rsa_server_name:           "{{ name_VPN }}"
 vpn_clients:                    [ 'laptop', 'android']

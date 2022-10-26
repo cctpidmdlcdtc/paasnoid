@@ -10,7 +10,7 @@ su - vagrant -c 'ansible-galaxy collection install community.docker'
 sed -i 's/PasswordAuthentication\ no/PasswordAuthentication\ yes/g' /etc/ssh/sshd_config
 systemctl restart sshd
 
-# Install paasnoid
+# Install QDPaaS
 su - vagrant -c 'ansible-playbook -i /vagrant/hosts /vagrant/install.yml --limit corcho'
 
 # Create VPN config for clients
