@@ -1,0 +1,176 @@
+client
+dev tun
+remote 10.0.33.10
+port 3342
+proto udp
+redirect-gateway def1
+remote-cert-tls server
+nobind
+persist-key
+persist-tun
+keepalive 20 60
+cipher AES-256-CBC
+
+key-direction 1
+<tls-auth>
+#
+# 2048 bit OpenVPN static key
+#
+-----BEGIN OpenVPN Static key V1-----
+5871dbed688cc61805efcf35626007ea
+96397753b73a9f417f1d381b15feaa00
+820ee04fad8303d340681a45bc91e3ea
+81e0a9d96e5878cfd6ae789deb49c9b1
+dc27e040757d058135d9489316a769cd
+8187aabe096070e7979a2d3344256645
+57b34fe8c6c670236457ca1b6f3c3305
+ce930780ef9b25c99c59ec86d2fd4639
+f0c212d08df5d3c7846ea9d698b319d4
+3e5409c9786dace8581b5e5a768f5f9a
+5df19cb83129bc4e97ab7a2b690cbb9e
+a95950857c00a0b153b287bf78c2dd3e
+01b740ee7c88b070aafa01e12a85ccb9
+c05f89fae8e5c6cc7843c6d9b255f986
+b0711135dc60acdb48c5eeab0400739a
+6914d26905b7406534379bd712602c51
+-----END OpenVPN Static key V1-----
+</tls-auth>
+<key>
+-----BEGIN PRIVATE KEY-----
+MIIEvgIBADANBgkqhkiG9w0BAQEFAASCBKgwggSkAgEAAoIBAQDA1qnZjNdEtZai
+AZmq3XyWQtdty68OCD9pY3dIdJzF0zLB/KNy63Z60LJUqgZprmAUaAP0c49Sao9H
+QKcLVrUmVe4janf/deE3HMZppBdlCZRtKDWPaBRaae/qFHeqLCs3fa7SOVKpSUQr
+M1Z4L1M/KjeyEKNCAXY46+gRhkTcKdrkvFXdXCRuhyhcLNCpv2VIG0ZDybUImr1t
+QsG9Otsph6zenTp+IlhpbGGfQDUHLdk12M+SlW10ycTgXacHvUioCpztVufYk3kd
+U3lOklsjBk9P/HmGmgRp790RfI2jzozGrI+I+8juSr2IiL9wGbocJ9cRaM5kRhcl
+kRu6L/NXAgMBAAECggEAII+emmdXqfhneO+APQOtF8otihKMengWDPuIlqlqF1U0
+CuFXz/3GQbKfigAzmQCipI9zq4EfwDDSBJv8GMQJTnHQBhbiMDZ9Usr/DbNxZ9QY
+Rd42PQK7/RBKPGI8WnWezn3gWQro1EDUy96dSSnkipPcV6rLhkes6KucwejEE9CK
+X1B70+SCqp3SsYboDWxgn24fNlLpCZfVRuCMLzbv8vbvz5ofOn1N1CVxh+6ZAkCe
+OQgjUHkBi6lYlduMw9UQDZPta9iSxrEoLnhvIkS5nsnz3kPtbiZm6PUEI4Ihf3ER
+6CERtvmPuOAobQ5hJ0HqDLBddS8eZ2gHc80kiYdPsQKBgQDkeNh9m+CYB6V0+SGy
+LXqpzAm4Lm2ciEnFVy4HMWR/FmcUZUr3ruLrO0N5asmDgC7xOkl/1MNgpjSGwjyu
+CkAvqZSd8pbRxMkj92C1KEmM/gmMxYMehsOHGkSjYE6ug3wdLzga2ZaEoyA3/Kck
+4+wiFjIAMHlX6GiOfTd2Bn0PQwKBgQDYErZKb6ZtAZcKVtaFs4xySxmXO/G9npoB
+giqubff4L0ixH0kggs0LhYfDe5MIrSEKddZe8xFAYVLvY2N9yw+Ju+HG6HmDbNuG
+J42uHBvV4eiqG0A4wmXlMoWVkWMObADJyUNG1Sq4yTPWcNea4T1u+EFkMOtO6aYh
+n3/Pd154XQKBgQDj3Kp9zALZXXblDLtQiw81XWusJ5Hmdf6tNF+RiO9j2KIBs2xr
+Th6+4KJQ6/IClss6hxlaxoX9VIY6iGogYdTWNFkmlhVZLNw2ZLgstPt2BL7diPdW
+cK19hvNBxgFzB2u3Z6qbDLuTmWW+sNq6bh7JeD1x9uZuiDoPMk8oBRyhJQKBgGV0
+Q8unqQk92eGs7IVSzPtNb/Km3tceBUn4CHpmgCw0Z3ljKz7sq8JhLGIJP/yu7fiv
+Y7ypfMwx5nMow6ppEh6l7VksBwJCtsDDCa9a22cN7+UPbpQ4EwgPNNIJte0roSMe
+MUytAqZJMuHZkiLS57mXL30Pyyz+YFchQS306pKxAoGBAMOiEbLoXu+88S12xXJ0
+UpxXB16Wloi7a3PwR5NqJkVEZa7sBX8l7WRVdcrYBSSCfRXAJcbNtszo4FXKo3yG
+L5/5Qh9GiVv+KNyLAkAJY9nGsm+hYK9bRpGfEZjdzUM1Ta8L91OB/TF0+Et9gsJj
+LP7JCLT9nOq37q/TUvydne4b
+-----END PRIVATE KEY-----
+</key>
+<cert>
+Certificate:
+    Data:
+        Version: 3 (0x2)
+        Serial Number:
+            f4:cf:f6:a7:ef:34:fc:51:7e:61:85:63:91:11:2f:cc
+        Signature Algorithm: sha256WithRSAEncryption
+        Issuer: CN=Sistemas
+        Validity
+            Not Before: Oct 26 18:25:20 2022 GMT
+            Not After : Oct 26 18:25:20 2023 GMT
+        Subject: CN=jandroide
+        Subject Public Key Info:
+            Public Key Algorithm: rsaEncryption
+                Public-Key: (2048 bit)
+                Modulus:
+                    00:c0:d6:a9:d9:8c:d7:44:b5:96:a2:01:99:aa:dd:
+                    7c:96:42:d7:6d:cb:af:0e:08:3f:69:63:77:48:74:
+                    9c:c5:d3:32:c1:fc:a3:72:eb:76:7a:d0:b2:54:aa:
+                    06:69:ae:60:14:68:03:f4:73:8f:52:6a:8f:47:40:
+                    a7:0b:56:b5:26:55:ee:23:6a:77:ff:75:e1:37:1c:
+                    c6:69:a4:17:65:09:94:6d:28:35:8f:68:14:5a:69:
+                    ef:ea:14:77:aa:2c:2b:37:7d:ae:d2:39:52:a9:49:
+                    44:2b:33:56:78:2f:53:3f:2a:37:b2:10:a3:42:01:
+                    76:38:eb:e8:11:86:44:dc:29:da:e4:bc:55:dd:5c:
+                    24:6e:87:28:5c:2c:d0:a9:bf:65:48:1b:46:43:c9:
+                    b5:08:9a:bd:6d:42:c1:bd:3a:db:29:87:ac:de:9d:
+                    3a:7e:22:58:69:6c:61:9f:40:35:07:2d:d9:35:d8:
+                    cf:92:95:6d:74:c9:c4:e0:5d:a7:07:bd:48:a8:0a:
+                    9c:ed:56:e7:d8:93:79:1d:53:79:4e:92:5b:23:06:
+                    4f:4f:fc:79:86:9a:04:69:ef:dd:11:7c:8d:a3:ce:
+                    8c:c6:ac:8f:88:fb:c8:ee:4a:bd:88:88:bf:70:19:
+                    ba:1c:27:d7:11:68:ce:64:46:17:25:91:1b:ba:2f:
+                    f3:57
+                Exponent: 65537 (0x10001)
+        X509v3 extensions:
+            X509v3 Basic Constraints: 
+                CA:FALSE
+            X509v3 Subject Key Identifier: 
+                33:73:59:89:96:FD:13:15:0D:AB:D7:C5:DF:A5:A8:79:3F:AD:8C:A3
+            X509v3 Authority Key Identifier: 
+                keyid:E3:32:6F:7D:1F:A8:38:1C:4C:E0:5F:2A:1B:34:4E:08:BB:D3:B0:08
+                DirName:/CN=Sistemas
+                serial:52:88:89:45:B7:6E:3B:8E:F2:D7:DD:14:FC:F8:78:15:BA:C8:5A:C7
+            X509v3 Extended Key Usage: 
+                TLS Web Client Authentication
+            X509v3 Key Usage: 
+                Digital Signature
+    Signature Algorithm: sha256WithRSAEncryption
+    Signature Value:
+        b1:3d:23:47:17:dc:3a:5d:39:f8:db:b3:d9:f5:b4:32:96:78:
+        77:cb:38:73:dd:90:5d:5d:fe:cc:83:6c:01:60:d8:ff:96:54:
+        a6:74:ed:b1:7e:8e:0c:5c:69:45:c9:dd:e6:d2:bd:77:be:37:
+        3b:a1:0e:b8:8f:bb:12:ea:f4:aa:4b:95:9d:46:47:01:e1:9e:
+        0f:f0:f9:72:e1:36:95:b3:12:db:30:bb:c4:fd:0f:55:4e:a0:
+        49:28:c6:77:1d:af:65:05:2d:5e:94:b0:46:93:e1:7a:95:be:
+        0f:53:cc:02:c4:89:42:bd:3c:99:07:e3:a2:79:8b:c3:37:95:
+        38:a9:5f:2b:5b:b9:17:cd:ff:61:f7:51:a6:2d:5f:0a:f9:86:
+        bd:f3:23:d2:3e:a3:eb:90:84:0d:7d:a8:7a:0f:87:8b:31:e6:
+        67:e9:2e:0b:dc:78:3a:b2:6f:2e:07:18:ac:4d:88:96:c5:02:
+        15:e5:4d:39:c6:3a:29:83:1a:90:2e:e7:a2:2c:2a:fd:78:89:
+        c2:f8:be:da:92:62:08:e3:bb:7c:00:b9:e8:de:44:8a:e6:f5:
+        2f:3d:f6:08:a3:dd:0a:de:f3:78:2f:57:b3:b8:9f:a3:6b:e6:
+        85:c3:4c:ce:69:5c:e9:55:fa:99:ab:ec:fd:08:b8:ff:d8:3f:
+        1b:c7:c0:9c
+-----BEGIN CERTIFICATE-----
+MIIDUjCCAjqgAwIBAgIRAPTP9qfvNPxRfmGFY5ERL8wwDQYJKoZIhvcNAQELBQAw
+EzERMA8GA1UEAwwIU2lzdGVtYXMwHhcNMjIxMDI2MTgyNTIwWhcNMjMxMDI2MTgy
+NTIwWjAUMRIwEAYDVQQDDAlqYW5kcm9pZGUwggEiMA0GCSqGSIb3DQEBAQUAA4IB
+DwAwggEKAoIBAQDA1qnZjNdEtZaiAZmq3XyWQtdty68OCD9pY3dIdJzF0zLB/KNy
+63Z60LJUqgZprmAUaAP0c49Sao9HQKcLVrUmVe4janf/deE3HMZppBdlCZRtKDWP
+aBRaae/qFHeqLCs3fa7SOVKpSUQrM1Z4L1M/KjeyEKNCAXY46+gRhkTcKdrkvFXd
+XCRuhyhcLNCpv2VIG0ZDybUImr1tQsG9Otsph6zenTp+IlhpbGGfQDUHLdk12M+S
+lW10ycTgXacHvUioCpztVufYk3kdU3lOklsjBk9P/HmGmgRp790RfI2jzozGrI+I
++8juSr2IiL9wGbocJ9cRaM5kRhclkRu6L/NXAgMBAAGjgZ8wgZwwCQYDVR0TBAIw
+ADAdBgNVHQ4EFgQUM3NZiZb9ExUNq9fF36WoeT+tjKMwTgYDVR0jBEcwRYAU4zJv
+fR+oOBxM4F8qGzROCLvTsAihF6QVMBMxETAPBgNVBAMMCFNpc3RlbWFzghRSiIlF
+t247jvLX3RT8+HgVushaxzATBgNVHSUEDDAKBggrBgEFBQcDAjALBgNVHQ8EBAMC
+B4AwDQYJKoZIhvcNAQELBQADggEBALE9I0cX3DpdOfjbs9n1tDKWeHfLOHPdkF1d
+/syDbAFg2P+WVKZ07bF+jgxcaUXJ3ebSvXe+NzuhDriPuxLq9KpLlZ1GRwHhng/w
++XLhNpWzEtswu8T9D1VOoEkoxncdr2UFLV6UsEaT4XqVvg9TzALEiUK9PJkH46J5
+i8M3lTipXytbuRfN/2H3UaYtXwr5hr3zI9I+o+uQhA19qHoPh4sx5mfpLgvceDqy
+by4HGKxNiJbFAhXlTTnGOimDGpAu56IsKv14icL4vtqSYgjju3wAuejeRIrm9S89
+9gij3Qre83gvV7O4n6Nr5oXDTM5pXOlV+pmr7P0IuP/YPxvHwJw=
+-----END CERTIFICATE-----
+</cert>
+<ca>
+-----BEGIN CERTIFICATE-----
+MIIDQjCCAiqgAwIBAgIUUoiJRbduO47y190U/Ph4FbrIWscwDQYJKoZIhvcNAQEL
+BQAwEzERMA8GA1UEAwwIU2lzdGVtYXMwHhcNMjIxMDI2MTgyNTAyWhcNNDMwNTA5
+MTgyNTAyWjATMREwDwYDVQQDDAhTaXN0ZW1hczCCASIwDQYJKoZIhvcNAQEBBQAD
+ggEPADCCAQoCggEBAOUSo7tTYRLavA/pCUXsgJ+V+XRzcdtoDiulp4/y40vaMmDL
+gQ6DWQw/OHdPaJtyZIWIfLz5xBTWMJM3npg1hixcllwXATQPb836QkpWwZIFpAzV
+B6Ov+J9j+z5QdCyd5FBOnPAu2uz2PJXkCHxv8jbxQo409dwJ0ygfTA0xjngneKDH
+zQj1KLciob2P8palqYmGO95bS4I8KamN1DP1fKC9hoe7Aq7l6nceMkB5qDYmNetv
+Thy+PLQYmNhk9nlBpEk+PYx/UrdoTOBDDI8spQPxNimj+6sijfzk7+F+S/GaNIda
+RDgKFCcgUi1Z4etqM5fEhl2W2zhsp6+ZaMG2kiUCAwEAAaOBjTCBijAdBgNVHQ4E
+FgQU4zJvfR+oOBxM4F8qGzROCLvTsAgwTgYDVR0jBEcwRYAU4zJvfR+oOBxM4F8q
+GzROCLvTsAihF6QVMBMxETAPBgNVBAMMCFNpc3RlbWFzghRSiIlFt247jvLX3RT8
++HgVushaxzAMBgNVHRMEBTADAQH/MAsGA1UdDwQEAwIBBjANBgkqhkiG9w0BAQsF
+AAOCAQEAm0l/mDwbmhEsOnFFu+g54yD5AqVCZ9EpotSU+HSxithfhC3CJAiwbVPr
+TsrlB3X7C92mLnkw1ncOxijBcatRmqAF/cpPLDu+wvmC6Dc5rgAKCVdF8T34rAUG
+Fz4Jrn/kiyClDjaWWODHl8zUWOKgn54Qs/si9pf9y29ZXHbcOzNXarxSaiZ4ib7i
+lJCZWh9d9E2AMvczeJf/kdhxQoJ9YL8SsRpD/7+q1Xt15H+gOcnk9Up1ase6c4gs
+PL57/DjhxYD9H11gcV7JptNdO13u2JDJiuwQw25o93LTB61OIJOwg0eoh0rK8Z6l
+QeJnBNA+mAzjs07NigxoJQxCEPC/8A==
+-----END CERTIFICATE-----
+</ca>
+

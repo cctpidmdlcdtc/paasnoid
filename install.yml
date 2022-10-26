@@ -45,8 +45,8 @@
   become: true
   roles:
 #    - passbolt
-#    - transmission
-#    - emby
+    - transmission
+    - emby
     - nextcloud
   tags: external
 
