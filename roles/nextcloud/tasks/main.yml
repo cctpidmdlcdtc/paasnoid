@@ -196,6 +196,9 @@
       line: "  'overwriteprotocol' => 'https',"
 
 
+  - name: "{{ service_name }}  |  Pause for a few more seconds to finish nextcloud startup"
+    pause:
+      seconds: 120
 
   - name: "{{ service_name }}   |  Install external storage app"
     community.docker.docker_container_exec:
