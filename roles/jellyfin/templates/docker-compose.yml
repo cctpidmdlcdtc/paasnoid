@@ -18,7 +18,7 @@ services:
       - 8920
       - 1900
       -  7359/udp
-    restart: always
+    restart: unless-stopped
     volumes:
       - config:/config
       - cache:/cache

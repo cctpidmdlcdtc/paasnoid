@@ -21,7 +21,7 @@ services:
     image: nextcloud
     expose:
       - 80
-    restart: always
+    restart: unless-stopped
     volumes:
       - nextcloud:/var/www/html
       - apps:/var/www/html/custom_apps
@@ -41,7 +41,7 @@ services:
   db:
     image: mariadb
     command: --transaction-isolation=READ-COMMITTED --binlog-format=ROW --skip-innodb-read-only-compressed
-    restart: always
+    restart: unless-stopped
     volumes:
       - db:/var/lib/mysql
     environment:
@@ -72,7 +72,7 @@ services:
 #      - 80
 #      - 443
 #    stdin_open: true
-#    restart: always
+#    restart: unless-stopped
 #    stop_grace_period: 60s
 #    volumes:
 #       - oo_certs:/var/www/onlyoffice/Data
@@ -85,7 +85,7 @@ services:
 #       
 #  onlyoffice-rabbitmq:
 #    image: rabbitmq
-#    restart: always
+#    restart: unless-stopped
 #    expose:
 #      - '5672'
 #    networks:
@@ -97,7 +97,7 @@ services:
 #      - POSTGRES_DB=onlyoffice
 #      - POSTGRES_USER=onlyoffice
 #      - POSTGRES_HOST_AUTH_METHOD=trust
-#    restart: always
+#    restart: unless-stopped
 #    expose:
 #      - '5432'
 #    volumes:

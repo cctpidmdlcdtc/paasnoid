@@ -20,7 +20,7 @@
     lineinfile:
       backup: true
       path: /etc/default/grub
-      regexp: '^GRUB_CMDLINE_LINUX_DEFAULT=".*amd_iommu=on iommu=pt kvm.ignore_msrs=1'
+      regexp: '^GRUB_CMDLINE_LINUX_DEFAULT=".*amd_iommu=on iommu=pt kvm.ignore_msrs=1.*"'
       state: absent
     check_mode: true
     register: grub_cmdline_check
@@ -39,7 +39,7 @@
     lineinfile:
       backup: true
       path: /etc/default/grub
-      regexp: '^GRUB_CMDLINE_LINUX_DEFAULT=".*earlymodules=vfio-pci video=efifb:off tsc=unstable trace_clock=local'
+      regexp: '^GRUB_CMDLINE_LINUX_DEFAULT=".*earlymodules=vfio-pci video=efifb:off tsc=unstable trace_clock=local.*"'
       state: absent
     check_mode: true
     register: grub_cmdline_check
@@ -58,7 +58,7 @@
     lineinfile:
       backup: true
       path: /etc/default/grub
-      regexp: '^GRUB_CMDLINE_LINUX_DEFAULT=".*earlymodules=vfio-pci video=efifb:off'
+      regexp: '^GRUB_CMDLINE_LINUX_DEFAULT=".*earlymodules=vfio-pci video=efifb:off.*"'
       state: absent
     check_mode: true
     register: grub_cmdline_check
@@ -83,7 +83,7 @@
     lineinfile:
       backup: true
       path: /etc/default/grub
-      regexp: '^GRUB_CMDLINE_LINUX_DEFAULT=".*intel_iommu=on,igfx_off kvm.ignore_msrs=1'
+      regexp: '^GRUB_CMDLINE_LINUX_DEFAULT=".*intel_iommu=on,igfx_off kvm.ignore_msrs=1.*"'
       state: absent
     check_mode: true
     register: grub_cmdline_check
@@ -99,17 +99,17 @@
     notify: update grub
     
 
-  - name: KVM  |  Check if Intel i915 perfromance tunning is configured in the GRUB config
+  - name: KVM  |  Check if Intel i915 performance tunning is configured in the GRUB config
     lineinfile:
       backup: true
       path: /etc/default/grub
-      regexp: '^GRUB_CMDLINE_LINUX_DEFAULT=".*dev.i915.perf_stream_paranoid=0'
+      regexp: '^GRUB_CMDLINE_LINUX_DEFAULT=".*dev.i915.perf_stream_paranoid=0.*"'
       state: absent
     check_mode: true
     register: grub_cmdline_check
     changed_when: false
 
-  - name: KVM  |  Insert Intel i915 perfromance tunning if missing
+  - name: KVM  |  Insert Intel i915 performance tunning if missing
     lineinfile:
       backrefs: true
       path: /etc/default/grub

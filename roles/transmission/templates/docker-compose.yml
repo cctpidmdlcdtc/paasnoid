@@ -15,7 +15,7 @@ services:
       - 9091
       - 51413
       - 51413/udp
-    restart: always
+    restart: unless-stopped
     volumes:
       - config:/var/lib/transmission-daemon
       - /docker-share/completo:/var/lib/transmission-daemon/downloads
