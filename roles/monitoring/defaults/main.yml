@@ -1,6 +1,6 @@
 service_name: monitoring
-service_subnet: '10.101.3.0/24'
-service_gateway: 10.101.3.1
+service_subnet: '10.101.2.0/24'
+service_gateway: 10.101.2.1
 
 net_in: [
   '# {{ service_name }}',
@@ -11,6 +11,8 @@ net_out: [
   '# {{ service_name }}',
   '-A OUTPUT -o br-{{ service_name }} -p tcp -m tcp --dport 80 -m conntrack --ctstate NEW -j ACCEPT'
 ]
+
+# faltan reglas de dev_BRIDGE_LAN:
 net_forward: [
   '# {{ service_name }}',
   '# speedtest querying internet',
@@ -18,11 +20,15 @@ net_forward: [
   '-A FORWARD -i br-{{ service_name }} -o {{ dev_BRIDGE_WAN }} -p tcp -m multiport --dports 80,443,8080 -m conntrack --ctstate NEW  -j ACCEPT',
   '# alermanager sends emails',
   '-A FORWARD -i br-{{ service_name }} -o {{ dev_BRIDGE_WAN }} -p tcp -m tcp --dport 587 -m conntrack --ctstate NEW  -j ACCEPT',
-  '# querying windows lan hosts',
-  '-A FORWARD -i br-{{ service_name }} -o {{ dev_BRIDGE_LAN }} -p tcp -m tcp --dport 9182 -m conntrack --ctstate NEW -j ACCEPT',
   '# Vagrant needs network traffic',
   '-A FORWARD -i br-{{ service_name }} -o br-{{ service_name }} -j ACCEPT'
 ]
+# estas reglas faltan:
+#net_forward:
+#  '# querying windows lan hosts',
+#  '-A FORWARD -i br-{{ service_name }} -o {{ dev_BRIDGE_LAN }} -p tcp -m tcp --dport 9182 -m conntrack --ctstate NEW -j ACCEPT',
+#]
+
 net_nat: []
 
 services:

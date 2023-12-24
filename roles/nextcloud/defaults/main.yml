@@ -1,6 +1,6 @@
 service_name: nextcloud
-service_subnet: '10.101.0.0/24'
-service_gateway: 10.101.0.1
+service_subnet: '10.101.4.0/24'
+service_gateway: 10.101.4.1
 ip_host_listen: "{{ ip_VPN }}"
 br_output: "br-{{ service_name }}"
 

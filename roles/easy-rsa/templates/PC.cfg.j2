@@ -1,6 +1,6 @@
 client
 dev tun
-remote {{ ip_VPN_server }} {{ VPN_port }} udp
+remote {{ fqdn_VPN_server }} {{ VPN_port }} udp
 redirect-gateway def1
 remote-cert-tls server
 nobind

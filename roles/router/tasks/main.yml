@@ -8,6 +8,7 @@
 
 - name: Configure Access Point
   include: hostapd.yml
+  when: ap_enabled
 
 
 
@@ -19,11 +20,13 @@
 #    line: net.ipv4.ip_forward=1
 #
 
-- name: Configure DHCP server
-  include: dhcp.yml
+- block:
+
+  - name: Configure DHCP server
+    include: dhcp.yml
+
+  - name: router  |  Apply iptables rules
+    include_role:
+      name: firewall
+
   when: dhcp_enabled
-
-
-- name: router  |  Apply iptables rules
-  include_role:
-    name: firewall

@@ -139,10 +139,9 @@
   lineinfile:
     path: /opt/pihole/etc-pihole/custom.list
     state: present
-    regexp: '^{{ ip_VPN }} {{ item[0].name }}'
-    line: '{{ ip_VPN }} {{ item[0].name }}'
-  loop:
-    - "{{ services }}"
+    regexp: '^{{ ip_VPN }} {{ item.name }}'
+    line: '{{ ip_VPN }} {{ item.name }}'
+  loop: "{{ services }}"
   when: "'router' in group_names"
 
 

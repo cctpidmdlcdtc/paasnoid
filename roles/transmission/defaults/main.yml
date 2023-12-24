@@ -1,6 +1,6 @@
 service_name: transmission
-service_subnet: '10.101.1.0/24'
-service_gateway: 10.101.1.1
+service_subnet: '10.101.5.0/24'
+service_gateway: 10.101.5.1
 ip_host_listen: "{{ ip_VPN }}"
 br_output: "br-{{ service_name }}"
 

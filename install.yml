@@ -45,9 +45,9 @@
   become: true
   roles:
 #    - passbolt
+    - nextcloud
     - transmission
     - emby
-    - nextcloud
   tags: external
 
 #- name: Services floating

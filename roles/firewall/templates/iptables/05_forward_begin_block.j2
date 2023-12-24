@@ -1,5 +1,7 @@
 
 -A FORWARD -m conntrack --ctstate RELATED,ESTABLISHED -j ACCEPT
 
+{% if dev_LAN is defined %}
 # Allow all lan
 -A FORWARD -i {{ dev_BRIDGE_LAN }} -j ACCEPT
+{% endif %}

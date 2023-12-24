@@ -2,8 +2,8 @@
 # if you don't use it, rules defined here will be overwritten later
 #service_name: node_exporter
 proxy_service_name: proxyhttp
-proxy_service_subnet: '10.101.7.0/24'
-proxy_service_gateway: 10.101.7.1
+proxy_service_subnet: '10.101.0.0/24'
+proxy_service_gateway: 10.101.0.1
 ip_host_listen: "{{ ip_VPN }}"
 br_output: "br-{{ proxy_service_name }}"
 

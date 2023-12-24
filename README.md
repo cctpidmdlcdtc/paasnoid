@@ -47,12 +47,6 @@ In order to setup the VPN gateway, private cloud and streaming service just run:
 ansible-playbook -i hosts install.yml
 ```
 
-Right now there's no way to avoid creating a LAN, but if you don't want to run a dhcp server on that interface, just append:
-
-```shell
--e "dhcp_enabled=false"
-```
-
 # Usage
 
 Everything is published inside the VPN so you must get the client configuration file and import it into some OpenVPN client.
@@ -66,7 +60,7 @@ In order to show the VPN config for _smartphone_ client you can call ansible fro
 Just run:
 
 ```shell
-$ vagrant ssh corcho -- '.local/bin/ansible-playbook -i /vagrant/hosts /vagrant/build_ovpn_client.yml -e "vpn_clients=smartphone"' | sed 's/\\n/\n/g'
+$ vagrant ssh corcho -- '.local/bin/ansible-playbook -i /vagrant/hosts /vagrant/build_openvpn_client.yml -e "vpn_clients=smartphone"' | sed 's/\\n/\n/g'
 ```
 
 ### Windows
@@ -74,7 +68,7 @@ $ vagrant ssh corcho -- '.local/bin/ansible-playbook -i /vagrant/hosts /vagrant/
 If you're on windows the output will be messed up, so you have to run two separate commands:
 
 ```shell
-C:\Users\luser\Downloads\qdpaas-0.1.0>vagrant ssh corcho -- '.local/bin/ansible-playbook -i /vagrant/hosts /vagrant/build_ovpn_client.yml -e "vpn_clients=smartphone"'
+C:\Users\luser\Downloads\qdpaas-0.1.0>vagrant ssh corcho -- '.local/bin/ansible-playbook -i /vagrant/hosts /vagrant/build_openvpn_client.yml -e "vpn_clients=smartphone"'
 C:\Users\luser\Downloads\qdpaas-0.1.0>vagrant ssh corcho -- 'cat /tmp/smartphone.ovpn'
 ```
 

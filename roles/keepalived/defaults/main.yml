@@ -1,8 +1,10 @@
 ---
 service_name:   keepalived
 
-virt_state:     "BACKUP"
-virt_priority:  "100"
+#virt_state:     "BACKUP"
+#virt_priority:  "100"
+virt_state:     "MASTER"
+virt_priority:  "101"
 
 net_in: [
   '# {{ service_name }}',

@@ -33,7 +33,7 @@ iface {{ dev_WLAN }} inet manual
 ##	pre-down kill -9 `cat /run/hostapd.pid`
 {% endif %}
 
-{% if dev_LAN %}
+{% if dev_LAN is defined %}
 allow-hotplug {{ dev_LAN }}
 iface {{ dev_LAN }} inet manual
 
